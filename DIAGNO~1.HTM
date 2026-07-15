@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnostico de Rentabilidad Empresarial</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--bg:#0a0d14;--surface:#111827;--surface2:#1a2235;--border:#1f2d45;--accent:#3b82f6;--accent2:#6366f1;--gold:#f59e0b;--green:#10b981;--red:#ef4444;--text:#f1f5f9;--muted:#94a3b8;--card:#141e2e;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6;}
+#progress-bar-wrap{position:fixed;top:0;left:0;right:0;z-index:100;height:4px;background:var(--border);}
+#progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .4s ease;width:0%;}
+.screen{display:none;min-height:100vh;padding:60px 20px 40px;}
+.screen.active{display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.container{max-width:720px;width:100%;}
+#screen-intro{background:radial-gradient(ellipse at 60% 0%,#1a2a4a 0%,var(--bg) 60%);}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3);color:var(--accent);padding:6px 16px;border-radius:100px;font-size:.8rem;font-weight:600;letter-spacing:.05em;margin-bottom:28px;}
+.badge::before{content:'●';font-size:.5rem;}
+h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:800;line-height:1.1;margin-bottom:20px;text-align:center;}
+h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.subtitle{text-align:center;}
+.subtitle{font-size:1.1rem;color:var(--muted);margin-bottom:40px;max-width:560px;}
+.stats-row{display:flex;gap:24px;margin-bottom:36px;flex-wrap:wrap;}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 24px;}
+.stat-num{font-size:1.6rem;font-weight:800;color:var(--accent);}
+.stat-label{font-size:.8rem;color:var(--muted);}
+.currency-selector{margin-bottom:36px;}
+.currency-label{font-size:.85rem;color:var(--muted);margin-bottom:12px;font-weight:500;}
+.currency-options{display:flex;gap:8px;flex-wrap:wrap;}
+.currency-btn{background:var(--surface);border:1px solid var(--border);color:var(--muted);padding:8px 16px;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s;}
+.currency-btn:hover{border-color:var(--accent);color:var(--text);}
+.currency-btn.active{border-color:var(--accent);background:rgba(59,130,246,.15);color:var(--accent);}
+.btn-primary{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;border:none;padding:16px 36px;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 4px 24px rgba(59,130,246,.35);transition:transform .2s,box-shadow .2s;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(59,130,246,.45);}
+.btn-secondary{background:transparent;border:1px solid var(--border);color:var(--muted);padding:12px 24px;border-radius:10px;font-size:.9rem;cursor:pointer;transition:border-color .2s,color .2s;}
+.btn-secondary:hover{border-color:var(--accent);color:var(--text);}
+.trust{display:flex;align-items:center;gap:8px;margin-top:20px;color:var(--muted);font-size:.85rem;justify-content:center;}
+.stats-row{justify-content:center;}
+.currency-selector{text-align:center;}
+.currency-options{justify-content:center;}
+#screen-intro .container{text-align:center;}
+#screen-intro .btn-primary{margin:0 auto;}
+/* CONTEXT SCREEN */
+#screen-context{background:var(--bg);}
+.context-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:40px;width:100%;}
+.context-card h2{font-size:1.4rem;font-weight:800;margin-bottom:8px;}
+.context-card .sub{font-size:.9rem;color:var(--muted);margin-bottom:32px;}
+.ctx-block{margin-bottom:32px;}
+.ctx-label{font-size:.85rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;}
+.ctx-options{display:flex;flex-direction:column;gap:10px;}
+.ctx-option{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 18px;cursor:pointer;transition:all .2s;display:flex;justify-content:space-between;align-items:center;}
+.ctx-option:hover{border-color:var(--accent);background:rgba(59,130,246,.08);}
+.ctx-option.selected{border-color:var(--accent);background:rgba(59,130,246,.15);}
+.ctx-option-label{font-size:.93rem;font-weight:500;}
+.ctx-option-sub{font-size:.78rem;color:var(--muted);}
+.ctx-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;transition:all .2s;}
+.ctx-option.selected .ctx-check{background:var(--accent);border-color:var(--accent);}
+/* QUESTIONS */
+#screen-question{background:var(--bg);}
+.q-header{margin-bottom:40px;width:100%;}
+.q-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.q-section{font-size:.8rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.1em;}
+.q-count{font-size:.8rem;color:var(--muted);}
+.q-progress-track{height:6px;background:var(--border);border-radius:100px;overflow:hidden;}
+.q-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:100px;transition:width .4s ease;}
+.question-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:40px;}
+.question-icon{font-size:2.5rem;margin-bottom:16px;}
+.question-text{font-size:1.3rem;font-weight:700;margin-bottom:8px;}
+.question-sub{font-size:.9rem;color:var(--muted);margin-bottom:32px;}
+.options{display:flex;flex-direction:column;gap:12px;}
+.option{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 20px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:16px;}
+.option:hover{border-color:var(--accent);background:rgba(59,130,246,.08);}
+.option.selected{border-color:var(--accent);background:rgba(59,130,246,.15);}
+.option-letter{width:32px;height:32px;border-radius:8px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:var(--muted);flex-shrink:0;transition:all .2s;}
+.option.selected .option-letter{background:var(--accent);color:white;}
+.option-text{font-size:.95rem;}
+.q-nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px;}
+/* EMAIL */
+#screen-email{background:radial-gradient(ellipse at 50% 100%,#1a2a4a 0%,var(--bg) 60%);}
+.email-card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:48px;text-align:center;}
+.email-card h2{font-size:1.8rem;font-weight:800;margin-bottom:12px;}
+.teaser-number{font-size:3rem;font-weight:900;color:var(--red);margin:24px 0;}
+.teaser-label{font-size:1rem;color:var(--muted);}
+.input-group{display:flex;flex-direction:column;gap:12px;margin:24px 0;}
+.input-field{background:var(--card);border:1px solid var(--border);color:var(--text);padding:14px 18px;border-radius:10px;font-size:1rem;outline:none;transition:border-color .2s;}
+.input-field:focus{border-color:var(--accent);}
+.input-field::placeholder{color:var(--muted);}
+.privacy{font-size:.78rem;color:var(--muted);}
+.email-error{font-size:.8rem;color:var(--red);margin-top:-8px;display:none;}
+.share-box{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-top:24px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+.share-url{flex:1;background:var(--card);border:1px solid var(--border);color:var(--muted);padding:10px 14px;border-radius:8px;font-size:.78rem;word-break:break-all;line-height:1.4;}
+.btn-copy{background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3);color:var(--accent);padding:10px 18px;border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .2s;}
+.btn-copy:hover{background:rgba(59,130,246,.25);}
+.btn-pdf{background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.3);color:var(--green);padding:10px 18px;border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .2s;}
+.btn-pdf:hover{background:rgba(16,185,129,.22);}
+@media print{
+  #progress-bar-wrap,#screen-intro,#screen-context,#screen-question,#screen-email,.share-box,.cta-section,.btn-primary,.btn-secondary,.locked-overlay{display:none!important;}
+  #screen-results{display:block!important;padding:20px!important;background:white!important;color:#111!important;}
+  #screen-results .container{max-width:100%!important;}
+  body{background:white!important;color:#111!important;}
+  .phase-banner,.carta-section,.score-section,.radar-section,.benchmark-section,.plan-section,.roadmap-section,.roi-section,.sources-note{page-break-inside:avoid;margin-bottom:16px!important;}
+  .result-card,.score-card,.loss-card{background:#f8f9fa!important;border-color:#ddd!important;color:#111!important;}
+  .roadmap-phases{grid-template-columns:1fr!important;}
+  h3,h4{color:#1a1a2e!important;}
+  .muted,.area-insight,.roadmap-step,.score-label{color:#555!important;}
+}
+/* RESULTS */
+#screen-results{background:var(--bg);align-items:flex-start;padding-top:80px;}
+#screen-results .container{max-width:900px;}
+.results-header{text-align:center;margin-bottom:32px;}
+.results-header h2{font-size:2rem;font-weight:800;margin-bottom:8px;}
+.results-header p{color:var(--muted);}
+.phase-banner{border-radius:20px;padding:28px 32px;margin-bottom:32px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;}
+.phase-icon{font-size:3rem;flex-shrink:0;}
+.phase-body h3{font-size:1.3rem;font-weight:800;margin-bottom:4px;}
+.phase-body p{font-size:.9rem;opacity:.85;}
+.phase-tag{font-size:.75rem;font-weight:700;padding:4px 12px;border-radius:100px;background:rgba(255,255,255,.15);display:inline-block;margin-bottom:8px;letter-spacing:.06em;}
+.carta-section{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:36px;margin-bottom:32px;position:relative;overflow:hidden;}
+.carta-section::before{content:'"';position:absolute;top:-10px;left:20px;font-size:8rem;color:var(--accent);opacity:.08;font-family:Georgia,serif;line-height:1;}
+.carta-section h3{font-size:.85rem;font-weight:700;color:var(--accent);margin-bottom:20px;text-transform:uppercase;letter-spacing:.08em;text-align:center;}
+.carta-text{font-size:.95rem;line-height:1.9;color:#cbd5e1;}
+.carta-text p{margin-bottom:14px;}
+.carta-firma{margin-top:24px;padding-top:20px;border-top:1px solid var(--border);font-size:.85rem;color:var(--muted);}
+.score-section{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px;}
+@media(max-width:600px){.score-section{grid-template-columns:1fr;}}
+.score-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+.score-ring{position:relative;width:140px;height:140px;margin-bottom:16px;}
+.score-ring svg{transform:rotate(-90deg);}
+.score-ring circle{fill:none;stroke-width:10;}
+.score-ring .track{stroke:var(--border);}
+.score-ring .fill{stroke-linecap:round;transition:stroke-dashoffset 1.5s ease;}
+.score-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:2.2rem;font-weight:900;}
+.score-label{font-size:.85rem;color:var(--muted);margin-bottom:4px;}
+.score-level{font-size:1.1rem;font-weight:700;}
+.loss-card{background:linear-gradient(135deg,rgba(239,68,68,.1),rgba(239,68,68,.05));border:1px solid rgba(239,68,68,.3);border-radius:20px;padding:32px;text-align:center;}
+.loss-amount{font-size:2.4rem;font-weight:900;color:var(--red);line-height:1;margin:12px 0;}
+.loss-label{font-size:.85rem;color:var(--muted);}
+.loss-year{font-size:.9rem;color:#fca5a5;margin-top:8px;}
+.loss-note{font-size:.75rem;color:var(--muted);margin-top:12px;padding-top:12px;border-top:1px solid rgba(239,68,68,.2);line-height:1.5;}
+.radar-section{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px;margin-bottom:32px;}
+.radar-section h3{font-size:1.1rem;font-weight:700;margin-bottom:24px;text-align:center;}
+.radar-wrap{max-width:380px;margin:0 auto;}
+.areas-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:32px;}
+@media(max-width:500px){.areas-grid{grid-template-columns:1fr;}}
+.area-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;}
+.area-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.area-name{font-size:.9rem;font-weight:600;}
+.area-score-badge{font-size:.8rem;font-weight:700;padding:3px 10px;border-radius:100px;}
+.area-bar{height:6px;background:var(--border);border-radius:100px;overflow:hidden;}
+.area-bar-fill{height:100%;border-radius:100px;transition:width 1.2s ease;}
+.area-insight{font-size:.8rem;color:var(--muted);margin-top:8px;}
+.benchmark-section{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:32px;}
+.benchmark-section h3{font-size:1rem;font-weight:700;margin-bottom:20px;text-align:center;}
+.benchmark-row{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.benchmark-label{font-size:.85rem;width:160px;flex-shrink:0;color:var(--muted);}
+.benchmark-track{flex:1;height:8px;background:var(--border);border-radius:100px;position:relative;}
+.benchmark-you{height:100%;border-radius:100px;background:var(--accent);}
+.benchmark-avg{position:absolute;top:-3px;width:2px;height:14px;background:var(--gold);border-radius:2px;}
+.benchmark-legend{display:flex;gap:20px;font-size:.78rem;color:var(--muted);margin-bottom:16px;}
+.legend-dot{width:10px;height:10px;border-radius:2px;}
+.plan-section{margin-bottom:32px;}
+.plan-section h3{font-size:1.3rem;font-weight:800;margin-bottom:20px;text-align:center;}
+.action-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px;display:flex;gap:20px;}
+.action-num{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:900;flex-shrink:0;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;}
+.action-body h4{font-size:1rem;font-weight:700;margin-bottom:6px;}
+.action-body p{font-size:.88rem;color:var(--muted);margin-bottom:10px;}
+.action-impact{display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.25);color:var(--green);font-size:.78rem;font-weight:600;padding:4px 10px;border-radius:100px;}
+.roadmap-section{margin-bottom:32px;}
+.roadmap-section h3{font-size:1.1rem;font-weight:700;margin-bottom:20px;text-align:center;}
+.roadmap-phases{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+@media(max-width:600px){.roadmap-phases{grid-template-columns:1fr;}}
+.roadmap-phase{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;position:relative;overflow:hidden;}
+.roadmap-phase::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.phase-mes1::after{background:var(--red);}
+.phase-mes2::after{background:var(--gold);}
+.phase-mes3::after{background:var(--green);}
+.roadmap-phase-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;text-align:center;}
+.phase-mes1 .roadmap-phase-label{color:var(--red);}
+.phase-mes2 .roadmap-phase-label{color:var(--gold);}
+.phase-mes3 .roadmap-phase-label{color:var(--green);}
+.roadmap-phase-title{font-size:.95rem;font-weight:700;margin-bottom:16px;text-align:center;line-height:1.3;}
+.roadmap-task{margin-bottom:14px;}
+.roadmap-task-title{display:flex;gap:8px;font-size:.85rem;font-weight:600;color:var(--text);margin-bottom:6px;line-height:1.4;}
+.roadmap-task-title::before{content:'▸';color:var(--accent);flex-shrink:0;}
+.roadmap-steps{display:flex;flex-direction:column;gap:4px;padding-left:16px;}
+.roadmap-step{font-size:.76rem;color:var(--muted);line-height:1.4;display:flex;gap:6px;}
+.roadmap-step::before{content:'·';color:var(--accent);flex-shrink:0;font-weight:900;}
+.roadmap-focus-note{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.25);border-radius:12px;padding:14px 18px;margin-bottom:20px;font-size:.82rem;color:var(--muted);line-height:1.6;text-align:center;}
+.roadmap-focus-note strong{color:var(--gold);}
+.roi-section{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px;margin-bottom:32px;}
+.roi-section h3{font-size:1.1rem;font-weight:700;margin-bottom:24px;text-align:center;}
+.roi-row{display:flex;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid var(--border);}
+.roi-row:last-child{border-bottom:none;}
+.roi-month{font-size:.8rem;color:var(--muted);width:60px;flex-shrink:0;font-weight:600;}
+.roi-bar-wrap{flex:1;height:10px;background:var(--border);border-radius:100px;overflow:hidden;}
+.roi-bar-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--green),#34d399);transition:width 1.4s ease;}
+.roi-amount{font-size:.85rem;font-weight:700;color:var(--green);width:150px;text-align:right;flex-shrink:0;}
+.roi-summary{margin-top:20px;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:12px;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.roi-summary-label{font-size:.85rem;color:var(--muted);}
+.roi-summary-num{font-size:1.4rem;font-weight:900;color:var(--green);}
+.sources-note{font-size:.75rem;color:var(--muted);margin-top:24px;padding:16px;background:rgba(255,255,255,.03);border-radius:10px;border:1px solid var(--border);line-height:1.7;}
+.sources-note strong{color:var(--text);}
+.cta-section{background:linear-gradient(135deg,rgba(59,130,246,.15),rgba(99,102,241,.15));border:1px solid rgba(99,102,241,.3);border-radius:24px;padding:40px;text-align:center;margin-bottom:40px;}
+.cta-section h3{font-size:1.6rem;font-weight:800;margin-bottom:12px;}
+.locked-wrap{position:relative;overflow:hidden;border-radius:20px;}
+.locked-overlay{position:absolute;inset:0;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);background:rgba(10,13,20,.7);border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;padding:32px;text-align:center;}
+.locked-overlay h4{font-size:1.15rem;font-weight:800;margin-bottom:8px;color:var(--text);}
+.locked-overlay p{font-size:.85rem;color:var(--muted);margin-bottom:20px;max-width:360px;}
+.price-badge{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;padding:10px 28px;border-radius:100px;font-size:1rem;font-weight:800;margin-bottom:16px;box-shadow:0 4px 20px rgba(59,130,246,.4);}
+.price-badge span{font-size:.8rem;opacity:.8;text-decoration:line-through;margin-right:4px;}
+.cta-section p{color:var(--muted);margin-bottom:28px;max-width:480px;margin-left:auto;margin-right:auto;}
+.cta-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.fade-up{animation:fadeUp .5s ease forwards;}
+.delay-1{animation-delay:.1s;opacity:0;}
+.delay-2{animation-delay:.2s;opacity:0;}
+.delay-3{animation-delay:.3s;opacity:0;}
+.delay-4{animation-delay:.4s;opacity:0;}
+</style>
+</head>
+<body>
+<div id="progress-bar-wrap"><div id="progress-bar"></div></div>
+
+<!-- INTRO -->
+<div id="screen-intro" class="screen active">
+  <div class="container">
+    <div class="badge" style="margin-left:auto;margin-right:auto;display:flex;width:fit-content;">Diagnostico Empresarial con IA</div>
+    <h1>Descubre cuanto dinero esta<br><span>perdiendo tu negocio</span><br>cada mes</h1>
+    <p class="subtitle">En menos de 5 minutos, analizamos 4 areas criticas de tu empresa y te entregamos un diagnostico personalizado con numeros reales de tu negocio.</p>
+    <div style="background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.2);border-radius:14px;padding:20px 24px;margin-bottom:32px;text-align:center;">
+      <p style="font-size:.92rem;color:var(--muted);line-height:1.7;max-width:580px;margin:0 auto;">Anos de experiencia en Transformacion de Negocios, condensados en 15 minutos. Lo que antes era exclusivo de grandes corporaciones con presupuestos de consultoria de 6 cifras, hoy esta al alcance de cualquier PYME o emprendedor de LATAM &mdash; con una inversion minima y un retorno que puedes medir desde el primer mes.</p>
+    </div>
+    <div class="stats-row">
+      <div class="stat"><div class="stat-num">4</div><div class="stat-label">Areas analizadas</div></div>
+      <div class="stat"><div class="stat-num">14</div><div class="stat-label">Preguntas clave</div></div>
+      <div class="stat"><div class="stat-num">5 min</div><div class="stat-label">Tiempo estimado</div></div>
+    </div>
+    <div class="currency-selector">
+      <div class="currency-label">Selecciona tu moneda:</div>
+      <div class="currency-options">
+        <button class="currency-btn" onclick="setCurrency('COP')" id="cur-COP">COP</button>
+        <button class="currency-btn active" onclick="setCurrency('USD')" id="cur-USD">USD</button>
+        <button class="currency-btn" onclick="setCurrency('MXN')" id="cur-MXN">MXN</button>
+        <button class="currency-btn" onclick="setCurrency('ARS')" id="cur-ARS">ARS</button>
+        <button class="currency-btn" onclick="setCurrency('PEN')" id="cur-PEN">PEN</button>
+        <button class="currency-btn" onclick="setCurrency('CLP')" id="cur-CLP">CLP</button>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="show('screen-context')">Iniciar mi diagnostico --></button>
+    <div class="trust">100% gratuito &middot; Resultados inmediatos &middot; Sin tarjeta de credito</div>
+  </div>
+</div>
+
+<!-- CONTEXTO DEL NEGOCIO -->
+<div id="screen-context" class="screen">
+  <div class="container">
+    <div class="context-card">
+      <h2>Primero, cuentanos sobre tu negocio</h2>
+      <p class="sub">Estos dos datos anclan el calculo a tu realidad. Usamos rangos, no valores exactos.</p>
+
+      <div class="ctx-block">
+        <div class="ctx-label">Facturacion mensual aproximada</div>
+        <div class="ctx-options" id="revenue-options"></div>
+      </div>
+
+      <div class="ctx-block">
+        <div class="ctx-label">Clientes activos actualmente</div>
+        <div class="ctx-options">
+          <div class="ctx-option" onclick="selectClients(0,this)" data-val="3"><div class="ctx-option-label">1 a 5 clientes</div><div class="ctx-check"></div></div>
+          <div class="ctx-option" onclick="selectClients(1,this)" data-val="13"><div class="ctx-option-label">6 a 20 clientes</div><div class="ctx-check"></div></div>
+          <div class="ctx-option" onclick="selectClients(2,this)" data-val="35"><div class="ctx-option-label">21 a 50 clientes</div><div class="ctx-check"></div></div>
+          <div class="ctx-option" onclick="selectClients(3,this)" data-val="80"><div class="ctx-option-label">Mas de 50 clientes</div><div class="ctx-check"></div></div>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="ctx-continue" onclick="startQuestions()" disabled>Continuar con el diagnostico --></button>
+    </div>
+  </div>
+</div>
+
+<!-- PREGUNTAS -->
+<div id="screen-question" class="screen">
+  <div class="container">
+    <div class="q-header">
+      <div class="q-meta"><span class="q-section" id="q-section-label"></span><span class="q-count" id="q-count-label"></span></div>
+      <div class="q-progress-track"><div class="q-progress-fill" id="q-progress-fill"></div></div>
+    </div>
+    <div class="question-card">
+      <div class="question-icon" id="q-icon"></div>
+      <div class="question-text" id="q-text"></div>
+      <div class="question-sub" id="q-sub"></div>
+      <div class="options" id="q-options"></div>
+      <div class="q-nav">
+        <button class="btn-secondary" id="btn-back" onclick="prevQuestion()">Anterior</button>
+        <button class="btn-primary" id="btn-next" onclick="nextQuestion()" disabled>Continuar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EMAIL GATE -->
+<div id="screen-email" class="screen">
+  <div class="container" style="max-width:520px">
+    <div class="email-card">
+      <div style="font-size:2.5rem;margin-bottom:16px">🔍</div>
+      <h2>Tu diagnostico esta listo</h2>
+      <p style="color:var(--muted);margin-bottom:8px">Calculado sobre tu facturacion declarada. Perdida mensual estimada:</p>
+      <div class="teaser-number" id="teaser-loss">---</div>
+      <div class="teaser-label">perdida mensual estimada</div>
+      <p style="margin:20px 0 6px;color:var(--muted);font-size:.9rem">Ingresa tu nombre y email para ver tu puntaje por area de forma gratuita.</p>
+      <div class="input-group">
+        <input class="input-field" type="text" id="input-name" placeholder="Tu nombre" />
+        <input class="input-field" type="email" id="input-email" placeholder="Tu email de trabajo *" />
+        <div class="email-error" id="email-error">Por favor ingresa un email valido para continuar.</div>
+        <input class="input-field" type="text" id="input-company" placeholder="Nombre de tu empresa (opcional)" />
+      </div>
+      <!-- OPCION PAGO -->
+      <div style="background:linear-gradient(135deg,rgba(59,130,246,.12),rgba(99,102,241,.12));border:1px solid rgba(99,102,241,.35);border-radius:16px;padding:22px;margin-bottom:14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <div style="font-size:.72rem;font-weight:700;color:var(--accent);letter-spacing:.08em;">INFORME COMPLETO</div>
+          <div style="font-size:.7rem;font-weight:700;background:rgba(245,158,11,.15);color:var(--gold);padding:3px 10px;border-radius:100px;letter-spacing:.05em;">PRECIO LANZAMIENTO</div>
+        </div>
+        <div style="font-size:.85rem;color:var(--muted);margin-bottom:14px;line-height:1.6;">Lo que un consultor cobra por una sola sesion de diagnostico &mdash; entregado de forma inmediata, con tus numeros reales y benchmarks de McKinsey, Bain y Deloitte.</div>
+        <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:6px;">
+          <div style="font-size:2rem;font-weight:900;color:var(--text)" id="price-display">$37 USD</div>
+          <div style="font-size:1rem;color:var(--muted);text-decoration:line-through" id="price-original">$247 USD</div>
+        </div>
+        <div style="font-size:.75rem;color:var(--muted);margin-bottom:16px;">Acceso inmediato &middot; Pago unico &middot; Sin suscripcion</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:16px;font-size:.78rem;color:var(--muted);">
+          <div>&#10003; Perdidas por area con montos exactos</div>
+          <div>&#10003; Plan de 3 acciones priorizadas</div>
+          <div>&#10003; Hoja de ruta 90 dias</div>
+          <div>&#10003; Proyeccion ROI a 6 meses</div>
+        </div>
+        <a id="hotmart-link" href="https://pay.hotmart.com/J106755421R" target="_blank" style="text-decoration:none;display:block">
+          <button class="btn-primary" style="width:100%;justify-content:center;" onclick="saveLeadAndPay()">Acceder al informe completo &rarr; $37 USD</button>
+        </a>
+        <div style="font-size:.72rem;color:var(--muted);text-align:center;margin-top:10px;">&#128274; Pago seguro via Hotmart &middot; Garantia de satisfaccion</div>
+      </div>
+      <!-- OPCION GRATIS -->
+      <button class="btn-secondary" style="width:100%;justify-content:center;margin-bottom:8px" onclick="showResults(true)">Ver solo mi puntaje por area (gratis)</button>
+      <button class="btn-secondary" style="width:100%;justify-content:center;margin-bottom:8px;border-color:#f59e0b;color:#f59e0b;font-size:.8rem" onclick="showResults(false)">&#128295; Vista previa completa (solo para el creador)</button>
+      <div class="privacy">Tu informacion esta segura. No enviamos spam.</div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTADOS -->
+<div id="screen-results" class="screen">
+  <div class="container">
+    <div class="results-header fade-up">
+      <div class="badge">Diagnostico completado</div>
+      <h2>Tu Reporte de Rentabilidad Empresarial</h2>
+      <p id="results-intro-text"></p>
+    </div>
+    <div id="phase-banner" class="phase-banner fade-up"></div>
+    <div class="share-box fade-up" id="share-box" style="display:none">
+      <div style="font-size:.8rem;color:var(--muted);flex-basis:100%;margin-bottom:4px;">&#128279; <strong style="color:var(--text)">Guarda o comparte tu diagnostico</strong> — este link reconstruye tus resultados exactos:</div>
+      <div class="share-url" id="share-url">Generando link...</div>
+      <button class="btn-copy" onclick="copyShareLink()">Copiar link</button>
+      <button class="btn-pdf" onclick="window.print()">Descargar PDF</button>
+    </div>
+    <div class="carta-section fade-up delay-1">
+      <h3>Diagnostico personalizado</h3>
+      <div class="carta-text" id="carta-text"></div>
+      <div class="carta-firma">Equipo Focus &mdash; Inteligencia de Rentabilidad</div>
+    </div>
+    <div class="score-section fade-up delay-1">
+      <div class="score-card">
+        <div class="score-ring">
+          <svg viewBox="0 0 140 140" width="140" height="140">
+            <circle class="track" cx="70" cy="70" r="60"/>
+            <circle class="fill" id="score-circle" cx="70" cy="70" r="60" stroke-dasharray="376.99" stroke-dashoffset="376.99"/>
+          </svg>
+          <div class="score-num" id="score-display">0</div>
+        </div>
+        <div class="score-label">Score de Rentabilidad</div>
+        <div class="score-level" id="score-level">---</div>
+      </div>
+      <div class="loss-card">
+        <div class="loss-label">Estas perdiendo aproximadamente</div>
+        <div class="loss-amount" id="loss-display">---</div>
+        <div class="loss-label">al mes por ineficiencias identificadas</div>
+        <div class="loss-year" id="loss-year-display"></div>
+        <div class="loss-note" id="loss-note"></div>
+      </div>
+    </div>
+    <div class="radar-section fade-up delay-2">
+      <h3 style="text-align:center;margin-bottom:20px;">Analisis por area de negocio</h3>
+      <div class="radar-wrap"><canvas id="radarChart"></canvas></div>
+    </div>
+    <div class="areas-grid fade-up delay-2" id="areas-grid"></div>
+    <div class="benchmark-section fade-up delay-3">
+      <h3 style="text-align:center;margin-bottom:20px;">Tu posicion vs. el mercado</h3>
+      <div class="benchmark-legend">
+        <div style="display:flex;align-items:center;gap:6px"><div class="legend-dot" style="background:var(--accent)"></div>Tu negocio</div>
+        <div style="display:flex;align-items:center;gap:6px"><div class="legend-dot" style="background:var(--gold)"></div>Promedio del mercado</div>
+      </div>
+      <div id="benchmark-rows"></div>
+    </div>
+    <div class="plan-section fade-up delay-3">
+      <h3 style="text-align:center;margin-bottom:20px;">Tu Plan de Accion Priorizado</h3>
+      <div id="action-plan"></div>
+    </div>
+    <div class="roadmap-section fade-up delay-3">
+      <h3 style="text-align:center;margin-bottom:12px;">Hoja de Ruta - 90 Dias para Transformar tu Rentabilidad</h3>
+      <div class="roadmap-focus-note"><strong>Recomendacion estrategica:</strong> No intentes atacar todo al mismo tiempo. Cada mes tiene un foco claro y deliberado. La disciplina de ejecutar bien pocas cosas es lo que separa a los negocios que crecen de los que siempre estan ocupados pero no avanzan.</div>
+      <div class="roadmap-phases" id="roadmap-phases"></div>
+    </div>
+    <div class="roi-section fade-up delay-4">
+      <h3 style="text-align:center;margin-bottom:20px;">Proyeccion de Recuperacion - Cuanto puedes ganar en 6 meses?</h3>
+      <div id="roi-timeline"></div>
+      <div class="roi-summary">
+        <div>
+          <div class="roi-summary-label">Recuperacion acumulada en 6 meses</div>
+          <div class="roi-summary-num" id="roi-total">---</div>
+        </div>
+        <div style="text-align:right">
+          <div class="roi-summary-label">Inversion en este diagnostico</div>
+          <div style="font-size:1rem;font-weight:700;color:var(--muted)" id="roi-inversion">---</div>
+        </div>
+      </div>
+    </div>
+    <div class="sources-note fade-up delay-4">
+      <strong>Metodologia:</strong> Los porcentajes de perdida por area se basan en benchmarks de ineficiencia empresarial publicados por McKinsey Global Institute (2023), Bain &amp; Company Customer Loyalty Study (2022) y Deloitte SMB Operations Report (2023). Los montos se calculan sobre tu rango de facturacion declarado y se escalan segun tu score en cada area.
+    </div>
+    <div id="cta-section-free" class="cta-section fade-up delay-4" style="display:none">
+      <div style="font-size:2rem;margin-bottom:10px">🔒</div>
+      <h3>Tu plan de accion esta bloqueado</h3>
+      <p style="margin-bottom:6px">Ya sabes cuanto estas perdiendo. El informe completo te dice exactamente <strong style="color:var(--text)">donde, cuanto y como recuperarlo</strong> &mdash; con un plan priorizado por impacto economico real.</p>
+      <p style="font-size:.85rem;color:var(--muted);margin-bottom:20px">Lo que un consultor cobra por una sesion de diagnostico: <strong style="color:var(--text)">$247 USD</strong>. Lo que pagas hoy en precio de lanzamiento:</p>
+      <div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:8px;">
+        <div class="price-badge"><span>$247</span> $37 USD</div>
+      </div>
+      <div style="font-size:.75rem;color:var(--muted);margin-bottom:20px;">Precio de lanzamiento &middot; Acceso inmediato &middot; Pago unico</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:22px;font-size:.8rem;color:var(--muted);text-align:left;max-width:380px;margin-left:auto;margin-right:auto;">
+        <div>&#10003; Perdidas exactas por area</div>
+        <div>&#10003; Plan de accion priorizado</div>
+        <div>&#10003; Hoja de ruta 90 dias</div>
+        <div>&#10003; Proyeccion ROI 6 meses</div>
+      </div>
+      <div class="cta-buttons">
+        <a id="hotmart-link-2" href="https://pay.hotmart.com/J106755421R" target="_blank" style="text-decoration:none">
+          <button class="btn-primary">Desbloquear informe completo &rarr; $37 USD</button>
+        </a>
+        <button class="btn-secondary" onclick="window.print()">Imprimir resumen gratuito</button>
+      </div>
+      <div style="font-size:.72rem;color:var(--muted);margin-top:12px;">&#128274; Pago seguro via Hotmart &middot; Garantia de satisfaccion</div>
+    </div>
+    <div id="cta-section-paid" class="cta-section fade-up delay-4" style="display:none">
+      <h3>Convierte este diagnostico en resultados reales</h3>
+      <p>Con Focus &mdash; Inteligencia de Rentabilidad, implementas cada mejora con sistema, seguimiento y acompanamiento estrategico.</p>
+      <div class="cta-buttons">
+        <button class="btn-primary" onclick="alert('Gracias! Pronto nos ponemos en contacto contigo.')">Quiero acompanamiento con Focus</button>
+        <button class="btn-secondary" onclick="window.print()">Imprimir reporte</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+// CURRENCIES
+const currencies={USD:{symbol:'$',code:'USD',rate:1},COP:{symbol:'$',code:'COP',rate:4200},MXN:{symbol:'$',code:'MXN',rate:18.5},ARS:{symbol:'$',code:'ARS',rate:1150},PEN:{symbol:'S/',code:'PEN',rate:3.85},CLP:{symbol:'$',code:'CLP',rate:980}};
+let selectedCurrency=currencies.USD;
+function setCurrency(code){selectedCurrency=currencies[code];document.querySelectorAll('.currency-btn').forEach(b=>b.classList.remove('active'));document.getElementById('cur-'+code).classList.add('active');renderRevenueOptions();}
+function fmt(usd){const v=Math.round(usd*selectedCurrency.rate);return selectedCurrency.symbol+v.toLocaleString('es-CO')+' '+selectedCurrency.code;}
+
+// REVENUE RANGES (midpoints in USD)
+const revenueRanges=[
+  {label:'Menos de',val:750,   usdMax:1500},
+  {label:'Entre',   val:3000,  usdMin:1500, usdMax:5000},
+  {label:'Entre',   val:9000,  usdMin:5000, usdMax:15000},
+  {label:'Entre',   val:30000, usdMin:15000,usdMax:50000},
+  {label:'Mas de',  val:75000, usdMin:50000}
+];
+let selectedRevenue=null, selectedClients=null;
+
+function renderRevenueOptions(){
+  const c=selectedCurrency;
+  document.getElementById('revenue-options').innerHTML=revenueRanges.map((r,i)=>{
+    let label;
+    if(i===0) label='Menos de '+fmt(r.usdMax)+' / mes';
+    else if(i===revenueRanges.length-1) label='Mas de '+fmt(r.usdMin)+' / mes';
+    else label='Entre '+fmt(r.usdMin)+' y '+fmt(r.usdMax)+' / mes';
+    const sel=selectedRevenue===r.val?'selected':'';
+    return '<div class="ctx-option '+sel+'" onclick="selectRevenue('+r.val+',this)"><div class="ctx-option-label">'+label+'</div><div class="ctx-check"></div></div>';
+  }).join('');
+}
+
+function selectRevenue(val,el){
+  selectedRevenue=val;
+  document.querySelectorAll('#revenue-options .ctx-option').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+  checkCtxReady();
+}
+function selectClients(idx,el){
+  const vals=[3,13,35,80];
+  selectedClients=vals[idx];
+  document.querySelectorAll('[onclick^="selectClients"]').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+  checkCtxReady();
+}
+function checkCtxReady(){document.getElementById('ctx-continue').disabled=!(selectedRevenue&&selectedClients);}
+
+// SECTIONS & QUESTIONS
+const sections=[
+  {id:'finanzas',    label:'Finanzas y Precios',    icon:'💰',color:'#3b82f6',market:62, lossPct:0.08},
+  {id:'operaciones', label:'Operaciones y Tiempo',   icon:'⚙️',color:'#6366f1',market:55, lossPct:0.12},
+  {id:'clientes',    label:'Clientes y Retencion',   icon:'🤝',color:'#10b981',market:58, lossPct:0.10},
+  {id:'automatizacion',label:'Automatizacion e IA', icon:'🤖',color:'#f59e0b',market:40, lossPct:0.07}
+];
+
+const questions=[
+  {section:0,icon:'💰',text:'Como defines el precio de tus productos o servicios?',sub:'El metodo de fijacion de precios es el factor mas determinante de la rentabilidad.',options:[{text:'Calculo costos + margen deseado con analisis de mercado',score:100},{text:'Miro lo que cobra la competencia y me ajusto',score:55},{text:'Cobro lo que el cliente parece dispuesto a pagar',score:35},{text:'No tengo un metodo claro, voy caso a caso',score:10}]},
+  {section:0,icon:'📊',text:'Con que frecuencia revisas tus margenes de rentabilidad por producto o servicio?',sub:'La mayoria de negocios tienen servicios que en realidad generan perdidas.',options:[{text:'Mensualmente con dashboard de metricas',score:100},{text:'Trimestralmente o cuando surge un problema',score:60},{text:'Anualmente al hacer el balance',score:30},{text:'No los reviso de forma sistematica',score:5}]},
+  {section:0,icon:'📉',text:'Cuanto representa el descuento promedio que otorgas sobre tu precio de lista?',sub:'Los descuentos no controlados son uno de los principales destructores de margen.',options:[{text:'Menos del 5% - tengo politica de precios firme',score:100},{text:'Entre 5-15% - negocio caso a caso',score:65},{text:'Entre 15-30% - con frecuencia cedo a la presion',score:30},{text:'Mas del 30% o no lo tengo claro',score:10}]},
+  {section:1,icon:'⏱️',text:'Cuantas horas semanales dedicas a tareas administrativas repetitivas?',sub:'Reportes, facturacion, seguimiento manual, coordinar por WhatsApp...',options:[{text:'Menos de 3h - procesos y herramientas bien configurados',score:100},{text:'Entre 3-8h - algo automatizado pero aun hay trabajo manual',score:60},{text:'Entre 8-15h - consume parte importante de mi semana',score:25},{text:'Mas de 15h - estoy atrapado en lo operativo',score:5}]},
+  {section:1,icon:'📋',text:'Tienes procesos documentados y estandarizados en tu negocio?',sub:'Los procesos documentados permiten escalar, delegar y mantener calidad constante.',options:[{text:'Si, todo documentado y el equipo los sigue',score:100},{text:'Parcialmente - algunos procesos clave documentados',score:55},{text:'Poco - depende del conocimiento de personas clave',score:25},{text:'No, cada quien trabaja como mejor le parece',score:5}]},
+  {section:1,icon:'🔁',text:'Como manejas las tareas que se repiten cada semana?',sub:'Reportes, cotizaciones, seguimientos, publicaciones, facturacion...',options:[{text:'Automatizadas o delegadas con checklist claro',score:100},{text:'Delegadas pero sin mucho control',score:55},{text:'Las hago yo mismo cada vez desde cero',score:20},{text:'Se hacen cuando hay tiempo o se recuerdan',score:5}]},
+  {section:2,icon:'🔄',text:'Que porcentaje de tus clientes vuelve a comprarte o renueva contrato?',sub:'La retencion es hasta 7x mas rentable que adquirir un cliente nuevo. (Bain & Company)',options:[{text:'Mas del 70% - alta fidelizacion',score:100},{text:'Entre 40-70% - retencion moderada',score:60},{text:'Entre 20-40% - la mayoria no regresa',score:25},{text:'Menos del 20% o no lo mido',score:5}]},
+  {section:2,icon:'📞',text:'Tienes un sistema para dar seguimiento a prospectos que no cerraron?',sub:'El 80% de las ventas se cierra entre el 5to y 12vo contacto.',options:[{text:'Si, CRM con flujos de seguimiento automatico',score:100},{text:'Lo hacemos manualmente pero de forma consistente',score:55},{text:'Hacemos uno o dos seguimientos y lo dejamos',score:20},{text:'Si no responden, los damos por perdidos',score:5}]},
+  {section:2,icon:'💎',text:'Ofreces servicios adicionales o upgrades a tus clientes actuales?',sub:'El upsell a clientes existentes tiene costo de venta casi nulo.',options:[{text:'Si, estrategia de upsell aplicada sistematicamente',score:100},{text:'Ocasionalmente cuando surge la oportunidad',score:50},{text:'Rara vez - no queremos parecer insistentes',score:20},{text:'No, cada cliente compra lo que pide y ya',score:5}]},
+  {section:3,icon:'🤖',text:'Que tan avanzado es el uso de herramientas digitales en tu negocio?',sub:'CRM, email marketing, facturacion, gestion de proyectos, IA...',options:[{text:'Avanzado - herramientas integradas con IA',score:100},{text:'Intermedio - algunas herramientas, poco integradas',score:60},{text:'Basico - email, WhatsApp y Excel principalmente',score:25},{text:'Minimo - casi todo manual o en papel',score:5}]},
+  {section:3,icon:'📱',text:'Cuanto de tu comunicacion con clientes esta automatizada?',sub:'Confirmaciones, recordatorios, follow-ups post-compra...',options:[{text:'Gran parte - flujos automaticos bien configurados',score:100},{text:'Algo - algunos mensajes automaticos pero incompleto',score:55},{text:'Poco - principalmente manual con algunas plantillas',score:20},{text:'Nada - todo a mano cada vez',score:5}]},
+  {section:3,icon:'📈',text:'Usas datos y metricas para tomar decisiones en tu negocio?',sub:'Ventas, conversion, costo de adquisicion, margen por producto...',options:[{text:'Si, KPIs definidos y dashboards actualizados',score:100},{text:'Parcialmente - miro algunas metricas sin sistema',score:55},{text:'Poco - me guio mas por intuicion',score:20},{text:'No tengo claridad sobre las metricas de mi negocio',score:5}]}
+];
+
+let currentQ=0,answers=new Array(questions.length).fill(null),userName='',freeMode=true;
+const HOTMART_URL='https://pay.hotmart.com/J106755421R';
+
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+
+function startQuestions(){
+  if(!selectedRevenue||!selectedClients) return;
+  currentQ=0; answers=new Array(questions.length).fill(null);
+  show('screen-question'); renderQuestion();
+}
+
+function renderQuestion(){
+  const q=questions[currentQ],sec=sections[q.section],pct=(currentQ/questions.length)*100;
+  document.getElementById('q-section-label').textContent=sec.icon+' '+sec.label;
+  document.getElementById('q-count-label').textContent=(currentQ+1)+' de '+questions.length;
+  document.getElementById('q-progress-fill').style.width=pct+'%';
+  document.getElementById('progress-bar').style.width=(10+pct*0.8)+'%';
+  document.getElementById('q-icon').textContent=q.icon;
+  document.getElementById('q-text').textContent=q.text;
+  document.getElementById('q-sub').textContent=q.sub;
+  const L=['A','B','C','D'];
+  document.getElementById('q-options').innerHTML=q.options.map((o,i)=>'<div class="option '+(answers[currentQ]===i?'selected':'')+'" onclick="selectOption('+i+')"><div class="option-letter">'+L[i]+'</div><div class="option-text">'+o.text+'</div></div>').join('');
+  document.getElementById('btn-back').style.visibility=currentQ===0?'hidden':'visible';
+  document.getElementById('btn-next').disabled=answers[currentQ]===null;
+}
+function selectOption(i){answers[currentQ]=i;renderQuestion();}
+function nextQuestion(){if(answers[currentQ]===null)return;if(currentQ<questions.length-1){currentQ++;renderQuestion();}else showEmailGate();}
+function prevQuestion(){if(currentQ>0){currentQ--;renderQuestion();}}
+
+// COMPUTE — anchored to declared revenue + real benchmarks
+function computeResults(){
+  const sc=[0,1,2,3].map(s=>{
+    const idx=questions.reduce((a,q,i)=>q.section===s?[...a,i]:a,[]);
+    const sum=idx.reduce((t,i)=>t+(answers[i]!==null?questions[i].options[answers[i]].score:50),0);
+    return Math.round(sum/idx.length);
+  });
+  const overall=Math.round(sc.reduce((a,b)=>a+b,0)/4);
+  // Loss = revenue * benchmark_loss_pct * (1 - score/100)
+  const lpa=sc.map((s,i)=>Math.round(selectedRevenue * sections[i].lossPct * (1-s/100)));
+  const total=lpa.reduce((a,b)=>a+b,0);
+  return{sc,overall,lpa,total};
+}
+
+function showEmailGate(){
+  const{total}=computeResults();
+  document.getElementById('teaser-loss').textContent=fmt(total);
+  // Update price display to selected currency equivalent
+  const priceUSD=37, originalUSD=247;
+  const priceLocal=Math.round(priceUSD*selectedCurrency.rate);
+  const origLocal=Math.round(originalUSD*selectedCurrency.rate);
+  const priceStr=selectedCurrency.code==='USD'?'$37 USD':selectedCurrency.symbol+priceLocal.toLocaleString('es-CO')+' '+selectedCurrency.code;
+  const origStr=selectedCurrency.code==='USD'?'$247 USD':selectedCurrency.symbol+origLocal.toLocaleString('es-CO')+' '+selectedCurrency.code;
+  document.getElementById('price-display').textContent=priceStr;
+  if(document.getElementById('price-original')) document.getElementById('price-original').textContent=origStr;
+  show('screen-email');
+  document.getElementById('progress-bar').style.width='92%';
+}
+function validateEmail(){
+  const email=document.getElementById('input-email').value.trim();
+  const ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const err=document.getElementById('email-error');
+  err.style.display=ok?'none':'block';
+  return ok;
+}
+function saveLeadAndPay(){
+  if(!validateEmail()) return false;
+  userName=document.getElementById('input-name').value||'Empresario';
+}
+function showResults(isFree){
+  if(!validateEmail()) return;
+  freeMode=(isFree===true);
+  userName=document.getElementById('input-name').value||'Empresario';
+  show('screen-results');
+  document.getElementById('progress-bar').style.width='100%';
+  buildResults();
+}
+function generateShareURL(){
+  const{sc,overall}=computeResults();
+  const base=window.location.href.split('?')[0];
+  const params=new URLSearchParams({
+    s:sc.join('-'),
+    r:selectedRevenue,
+    c:selectedClients,
+    cur:selectedCurrency.code,
+    n:userName,
+    f:freeMode?'1':'0'
+  });
+  return base+'?'+params.toString();
+}
+function copyShareLink(){
+  const url=document.getElementById('share-url').textContent;
+  navigator.clipboard.writeText(url).then(()=>{
+    const btn=document.querySelector('.btn-copy');
+    btn.textContent='Copiado!';
+    setTimeout(()=>btn.textContent='Copiar link',2000);
+  });
+}
+function loadFromURL(){
+  const p=new URLSearchParams(window.location.search);
+  if(!p.get('s')) return false;
+  const sc=p.get('s').split('-').map(Number);
+  selectedRevenue=Number(p.get('r'))||3000;
+  selectedClients=Number(p.get('c'))||13;
+  const cur=p.get('cur')||'USD';
+  selectedCurrency=currencies[cur]||currencies.USD;
+  userName=p.get('n')||'Empresario';
+  freeMode=p.get('f')!=='0';
+  // Inject fake answers to match stored scores
+  answers=questions.map((q,i)=>{
+    const sec=q.section;
+    const target=sc[sec];
+    let best=0,bestDiff=999;
+    q.options.forEach((o,j)=>{if(Math.abs(o.score-target)<bestDiff){bestDiff=Math.abs(o.score-target);best=j;}});
+    return best;
+  });
+  show('screen-results');
+  buildResults();
+  return true;
+}
+
+function buildResults(){
+  const{sc,overall,lpa,total}=computeResults();
+
+  // FASE
+  const phases=[
+    {min:80,label:'FASE ELITE',title:'Negocio de Alto Rendimiento',desc:'Estas en el top 10% de empresas de tu categoria. Tu enfoque ahora es escalar con sistemas y proteger los margenes que ya tienes.',icon:'🏆',bg:'linear-gradient(135deg,#065f46,#047857)',color:'#34d399'},
+    {min:60,label:'FASE CRECIMIENTO',title:'Negocio con Potencial Activo',desc:'Tienes bases solidas pero hay fugas claras de rentabilidad. Con los ajustes correctos puedes crecer 30-50% sin aumentar tus costos fijos.',icon:'🚀',bg:'linear-gradient(135deg,#1e3a5f,#1d4ed8)',color:'#60a5fa'},
+    {min:40,label:'FASE ESTABILIZACION',title:'Negocio en Punto de Quiebre',desc:'Tu empresa funciona pero opera al limite. Sin intervencion en los proximos 90 dias, la presion sobre los margenes se volvera insostenible.',icon:'⚠️',bg:'linear-gradient(135deg,#431407,#c2410c)',color:'#fb923c'},
+    {min:0, label:'FASE CRITICA',title:'Negocio en Alerta Maxima',desc:'Hay sangrado activo de rentabilidad en multiples frentes. La prioridad es detener las perdidas inmediatas antes de pensar en crecer.',icon:'🚨',bg:'linear-gradient(135deg,#450a0a,#b91c1c)',color:'#f87171'}
+  ];
+  const phase=phases.find(p=>overall>=p.min);
+  const pb=document.getElementById('phase-banner');
+  pb.style.background=phase.bg;
+  pb.innerHTML='<div class="phase-icon">'+phase.icon+'</div><div class="phase-body"><div class="phase-tag" style="color:'+phase.color+'">'+phase.label+'</div><h3>'+phase.title+'</h3><p>'+phase.desc+'</p></div>';
+
+  // CARTA
+  const wi=sc.indexOf(Math.min(...sc)),bi=sc.indexOf(Math.max(...sc));
+  const revLabel=fmt(selectedRevenue)+'/mes';
+  document.getElementById('carta-text').innerHTML=
+    '<p>Hola <strong>'+userName+'</strong>, basandonos en tu facturacion mensual de aproximadamente <strong>'+revLabel+'</strong> y los resultados de tu evaluacion, hemos calculado el impacto economico real de las ineficiencias identificadas en tu negocio.</p>'+
+    '<p>Tu fortaleza mas clara esta en <strong>'+sections[bi].label+'</strong>, con un puntaje de '+Math.max(...sc)+'/100. Eso significa que ya tienes una base solida sobre la cual construir.</p>'+
+    '<p>Sin embargo, el area que mas te esta costando dinero hoy es <strong>'+sections[wi].label+'</strong>, con un score de '+Math.min(...sc)+'/100. Los benchmarks sectoriales indican que esta brecha representa aproximadamente <strong>'+fmt(lpa[wi])+'</strong> de perdida mensual en tu nivel de facturacion.</p>'+
+    '<p>El plan que encontraras a continuacion esta priorizado por impacto economico. Sigue el orden propuesto para maximizar la recuperacion en el menor tiempo posible.</p>';
+
+  document.getElementById('results-intro-text').textContent=phase.label+' - Score global: '+overall+'/100';
+
+  // SCORE
+  const se=document.getElementById('score-display'),ci=document.getElementById('score-circle'),C=376.99;
+  let sc2,sl;
+  if(overall>=75){sl='Negocio Optimizado';sc2='#10b981';}
+  else if(overall>=55){sl='Estable con Oportunidades';sc2='#f59e0b';}
+  else if(overall>=35){sl='En Riesgo';sc2='#f97316';}
+  else{sl='Situacion Critica';sc2='#ef4444';}
+  ci.style.stroke=sc2;
+  document.getElementById('score-level').textContent=sl;
+  document.getElementById('score-level').style.color=sc2;
+  let sv=0;const si2=setInterval(()=>{sv+=2;if(sv>=overall){sv=overall;clearInterval(si2);}se.textContent=sv;ci.style.strokeDashoffset=C-(C*sv/100);},20);
+
+  // PERDIDA — solo en modo pago
+  if(freeMode){
+    document.getElementById('loss-display').textContent='🔒 Bloqueado';
+    document.getElementById('loss-year-display').textContent='Desbloquea el informe completo para ver el impacto economico exacto.';
+    document.getElementById('loss-note').textContent='';
+  }else{
+    document.getElementById('loss-display').textContent=fmt(total);
+    document.getElementById('loss-year-display').textContent=fmt(total*12)+' de oportunidad anual sin aprovechar';
+    document.getElementById('loss-note').textContent='Calculado sobre tu facturacion declarada de '+fmt(selectedRevenue)+'/mes aplicando porcentajes de ineficiencia por area segun benchmarks sectoriales.';
+  }
+
+  // AREAS
+  const ai=[['Precios bien estructurados','Oportunidad de optimizar margenes','Fuga de rentabilidad en precios','Crisis de rentabilidad en precios'],['Operaciones eficientes','Tiempo recuperable con sistemas','Alto desperdicio operativo','Operaciones en caos'],['Alta fidelizacion de clientes','Potencial de retencion sin explotar','Perdida frecuente de clientes','Sin estrategia de retencion'],['Lider en digitalizacion','Automatizacion parcial','Oportunidad de digitalizar','Operacion completamente manual']];
+  document.getElementById('areas-grid').innerHTML=sc.map((s,i)=>{const sec=sections[i],bc=s>=70?'#10b981':s>=45?'#f59e0b':'#ef4444',ii=s>=70?0:s>=45?1:s>=25?2:3;return'<div class="area-card"><div class="area-header"><div class="area-name">'+sec.icon+' '+sec.label+'</div><div class="area-score-badge" style="background:'+bc+'22;color:'+bc+'">'+s+'/100</div></div><div class="area-bar"><div class="area-bar-fill" style="width:0%;background:'+sec.color+'" data-width="'+s+'%"></div></div><div class="area-insight">'+ai[i][ii]+'</div></div>';}).join('');
+  setTimeout(()=>{document.querySelectorAll('.area-bar-fill').forEach(el=>{el.style.width=el.dataset.width;});},100);
+
+  // RADAR
+  setTimeout(()=>{
+    const ctx=document.getElementById('radarChart').getContext('2d');
+    new Chart(ctx,{type:'radar',data:{labels:sections.map(s=>s.label.split(' ')[0]),datasets:[{label:'Tu negocio',data:sc,backgroundColor:'rgba(59,130,246,0.2)',borderColor:'#3b82f6',borderWidth:2,pointBackgroundColor:'#3b82f6',pointRadius:4},{label:'Promedio mercado',data:sections.map(s=>s.market),backgroundColor:'rgba(245,158,11,0.1)',borderColor:'#f59e0b',borderWidth:1.5,borderDash:[5,5],pointBackgroundColor:'#f59e0b',pointRadius:3}]},options:{scales:{r:{min:0,max:100,ticks:{stepSize:25,color:'#475569',backdropColor:'transparent',font:{size:10}},grid:{color:'#1f2d45'},pointLabels:{color:'#94a3b8',font:{size:11}},angleLines:{color:'#1f2d45'}}},plugins:{legend:{labels:{color:'#94a3b8',font:{size:11}}}}}});
+  },200);
+
+  // BENCHMARK
+  document.getElementById('benchmark-rows').innerHTML=sections.map((sec,i)=>'<div class="benchmark-row"><div class="benchmark-label">'+sec.icon+' '+sec.label.split(' ')[0]+'</div><div class="benchmark-track"><div class="benchmark-you" style="width:'+sc[i]+'%"></div><div class="benchmark-avg" style="left:'+sec.market+'%"></div></div><div style="font-size:.8rem;color:'+(sc[i]>=sec.market?'#10b981':'#f97316')+';width:44px;text-align:right;flex-shrink:0">'+(sc[i]>=sec.market?'+':'')+(sc[i]-sec.market)+'pts</div></div>').join('');
+
+  // PLAN
+  const acts=[
+    {a:0,th:70,t:'Implementa un modelo de precios basado en valor',d:'Las empresas que aplican pricing basado en valor capturan entre 20-40% mas de margen sin perder clientes (McKinsey Pricing Practice, 2023). Calcula el valor economico real que entregas y cobra un porcentaje de ese valor.',imp:'Impacto estimado: +'+fmt(Math.round(lpa[0]*0.6))+'/mes'},
+    {a:0,th:55,t:'Crea un dashboard mensual de rentabilidad por servicio',d:'El 30% de los servicios en empresas sin control de margenes generan perdidas ocultas (Deloitte, 2023). Identifica cuales son y ajusta o elimina.',imp:'Recuperacion estimada: +'+fmt(Math.round(lpa[0]*0.4))+'/mes'},
+    {a:1,th:70,t:'Automatiza tus 3 procesos mas repetitivos',d:'El McKinsey Global Institute (2023) estima que el 45% de las actividades laborales actuales pueden automatizarse. Empieza con Make.com o Zapier. Cada hora recuperada tiene valor directo en tu facturacion.',imp:'Capacidad liberada: ~'+Math.round(lpa[1]/50)+'h/semana'},
+    {a:1,th:50,t:'Documenta y estandariza tus procesos clave',d:'Empresas con procesos documentados escalan 3x mas rapido y tienen 40% menos errores operativos (Deloitte Operations, 2022). Empieza con los 5 procesos que mas se repiten.',imp:'Capacidad de escala sin contratar: +30%'},
+    {a:2,th:70,t:'Lanza un programa de fidelizacion post-venta',d:'Segun Bain & Company, aumentar la retencion de clientes en solo un 5% incrementa las ganancias entre 25% y 95%. Una secuencia de 30 dias post-compra puede transformar compradores unicos en clientes recurrentes.',imp:'Impacto estimado: +'+fmt(Math.round(lpa[2]*0.5))+'/mes'},
+    {a:2,th:50,t:'Activa un sistema de upsell estrategico',d:'El costo de venta a un cliente existente es 5-7x menor que adquirir uno nuevo (Bain, 2022). Define 1-2 ofertas de upgrade y presentalas en el momento de mayor satisfaccion del cliente.',imp:'Ingreso adicional estimado: +'+fmt(Math.round(lpa[2]*0.4))+'/mes'},
+    {a:3,th:70,t:'Integra IA en tu flujo de comunicacion y ventas',d:'Las PYMEs que adoptan IA en comunicacion reducen el tiempo de respuesta en 80% y aumentan la tasa de conversion en 15-25% (McKinsey, 2023). Empieza con chatbot o respuestas automaticas inteligentes.',imp:'Conversion adicional estimada: +'+Math.round(Math.max(1,lpa[3]/80))+' clientes/mes'},
+    {a:3,th:50,t:'Implementa un CRM y metricas basicas de negocio',d:'El 67% de las empresas que implementan un CRM reportan mejora en la tasa de cierre (Deloitte, 2023). HubSpot Free o Notion CRM son opciones de costo cero para empezar hoy.',imp:'Mejora en tasa de cierre: +'+Math.round(lpa[3]*0.3/selectedRevenue*100)+'% estimado'}
+  ];
+  const sorted=[...sc.entries()].sort((a,b)=>a[1]-b[1]);
+  const chosen=[];
+  sorted.forEach(([ai2,s])=>{if(chosen.length>=3)return;const x=acts.find(a=>a.a===ai2&&s<a.th&&!chosen.includes(a));if(x)chosen.push(x);});
+  acts.forEach(a=>{if(chosen.length<3&&!chosen.includes(a))chosen.push(a);});
+  document.getElementById('action-plan').innerHTML=chosen.slice(0,3).map((a,i)=>'<div class="action-card"><div class="action-num">'+(i+1)+'</div><div class="action-body"><h4>'+a.t+'</h4><p>'+a.d+'</p><div class="action-impact">'+a.imp+'</div></div></div>').join('');
+
+  // HOJA DE RUTA
+  // HOJA DE RUTA PERSONALIZADA con 3 pasos por tarea
+  const rmT=[
+    // [0] Finanzas
+    {m1:[
+      {t:'Audita tus precios y calcula el margen real de cada servicio',s:['Lista todos tus servicios con precio de venta y costo real (tiempo + herramientas)','Calcula el margen neto de cada uno: (precio - costo) / precio x 100','Marca en rojo los que tienen menos del 25% de margen neto']},
+      {t:'Elimina o reprecia los servicios con margen negativo o muy bajo',s:['Clasifica cada servicio en: rentable, ajustable o eliminar','Sube el precio o agrega condiciones a los servicios ajustables','Comunica los cambios con anticipacion y justifica el valor adicional']}
+    ],m2:[
+      {t:'Implementa precios basados en el valor que entregas, no en tu costo',s:['Calcula el valor economico concreto que genera tu servicio para el cliente','Define tu precio como el 10-20% de ese valor generado','Prueba el nuevo precio con 3 prospectos nuevos antes de aplicarlo masivamente']},
+      {t:'Crea un dashboard mensual de rentabilidad por servicio',s:['Define 5 metricas clave: ingresos, costo, margen, clientes y ticket promedio','Crea una hoja de calculo simple con esas columnas y actualiza el primer dia de cada mes','Pon una alerta si algun margen cae por debajo de tu umbral minimo']}
+    ],m3:[
+      {t:'Revisa precios con datos reales y ajusta los que quedaron cortos',s:['Compara el margen real vs el margen objetivo de los ultimos 2 meses','Identifica cuales servicios crecieron en demanda y tienen espacio para subir','Aplica el ajuste y comunica el valor adicional que lo justifica']},
+      {t:'Disenha un tier premium para clientes existentes',s:['Identifica que resultado adicional valora mas tu cliente ideal','Estructura el paquete con 2-3 beneficios exclusivos y concretos','Presentalo primero a tus 3 mejores clientes y mide la respuesta']}
+    ]},
+    // [1] Operaciones
+    {m1:[
+      {t:'Mapea tus tareas mas repetitivas y mide el tiempo que consumen',s:['Lleva un registro de tiempo durante 3 dias con papel o una app simple','Suma las horas semanales de cada tarea repetitiva','Calcula el costo real: horas x tu tarifa horaria minima']},
+      {t:'Documenta los 2 procesos que mas errores generan',s:['Graba en video como ejecutas el proceso mientras lo haces','Convierte el video en una lista de pasos en Google Docs o Notion','Pide a alguien que siga la guia sin tu ayuda para detectar lagunas']}
+    ],m2:[
+      {t:'Automatiza 2 tareas administrativas con Make.com o Zapier',s:['Identifica tareas entre apps digitales que haces manualmente','Busca si existe una automatizacion lista en Make o Zapier para esa combinacion','Activa y monitorea durante 1 semana antes de dejarla correr de forma autonoma']},
+      {t:'Crea un sistema de checklists para tareas recurrentes',s:['Usa Notion o Google Docs para crear una checklist por proceso clave','Define responsable y dia de ejecucion para cada paso','Revisa el cumplimiento cada semana durante el primer mes']}
+    ],m3:[
+      {t:'Delega o externaliza actividades de bajo valor',s:['Clasifica tus tareas: solo yo, alguien puede aprenderlo, se puede externalizar','Identifica un freelancer o herramienta para las tareas externalizables','Calcula el costo de externalizar vs el valor de tu tiempo recuperado']},
+      {t:'Mide el tiempo recuperado y reinviertelo en ventas',s:['Lleva un registro semanal de horas liberadas por automatizacion o delegacion','Asigna ese tiempo explicitamente a prospeccion o nuevos servicios','Mide si las horas reinvertidas generaron nuevos ingresos al final del mes']}
+    ]},
+    // [2] Clientes
+    {m1:[
+      {t:'Mapea el recorrido completo de tu cliente',s:['Lista cada punto de contacto desde el primer mensaje hasta el pago','Identifica en cual punto se pierde la mayoria de los prospectos','Define una accion concreta para mejorar ese punto de quiebre esta semana']},
+      {t:'Activa seguimiento de prospectos que no cerraron',s:['Lista todos los prospectos de los ultimos 90 dias que no compraron','Crea una secuencia de 3 mensajes: valor, caso de exito, oferta concreta','Envia el primer mensaje esta semana y mide cuantos responden']}
+    ],m2:[
+      {t:'Lanza una secuencia de seguimiento post-venta de 30 dias',s:['Define 4 momentos: dia 1 bienvenida, dia 7 check-in, dia 15 valor extra, dia 30 feedback','Redacta los mensajes para cada momento en maximo 5 lineas cada uno','Automatiza o agenda la secuencia en tu calendario o herramienta de mensajeria']},
+      {t:'Activa una oferta de upsell para clientes satisfechos',s:['Identifica el siguiente problema logico que tiene tu cliente despues de comprarte','Disenha una oferta que resuelva ese siguiente paso con precio claro','Presentala en el dia 15 o 30 de tu secuencia post-venta']}
+    ],m3:[
+      {t:'Lanza un programa de referidos con incentivo claro',s:['Define el incentivo: descuento, bono o servicio adicional por cada referido que compre','Comunica el programa a tus 5 mejores clientes de forma personalizada','Mide cuantos referidos genera en el primer mes y ajusta si es necesario']},
+      {t:'Mide tu tasa de retencion y establece una meta',s:['Calcula cuantos clientes del trimestre anterior siguen activos hoy','Define tu meta de retencion: minimo 70% trimestral','Identifica clientes en riesgo de irse y activa una accion preventiva']}
+    ]},
+    // [3] Automatizacion
+    {m1:[
+      {t:'Instala un CRM y centraliza todos tus contactos',s:['Crea cuenta en HubSpot Free o configura una base de datos en Notion','Importa todos tus contactos de WhatsApp, email y tarjetas fisicas','Clasifica cada contacto en: prospecto, cliente activo o cliente inactivo']},
+      {t:'Configura respuestas automaticas para consultas frecuentes',s:['Lista las 5 preguntas que mas recibes por WhatsApp o email','Redacta una respuesta clara y completa para cada una (maximo 3 parrafos)','Configuralas en WhatsApp Business o en la respuesta automatica de correo']}
+    ],m2:[
+      {t:'Conecta tus herramientas para eliminar trabajo manual',s:['Mapea que datos transfieres manualmente entre apps cada semana','Identifica las 2 conexiones que mas tiempo consumen y busca el conector en Make o Zapier','Activa la integracion y verifica que los datos lleguen correctamente durante 3 dias']},
+      {t:'Implementa un reporte semanal automatizado de metricas',s:['Define tus 5 KPIs: ingresos, prospectos, conversion, retencion y margen','Conecta tus fuentes de datos a una hoja de calculo o dashboard simple','Programa un recordatorio cada lunes para revisar el reporte en menos de 10 minutos']}
+    ],m3:[
+      {t:'Integra IA en un proceso de comunicacion o ventas',s:['Identifica una tarea de redaccion o respuesta que haces manualmente cada semana','Configura una herramienta de IA para ese proceso especifico','Crea una plantilla de prompt que cualquier miembro del equipo pueda usar sin dependerte']},
+      {t:'Evalua el ROI de cada herramienta que pagas',s:['Lista todas tus suscripciones digitales con su costo mensual','Para cada una define si genero un ingreso medible o te ahorro tiempo equivalente a su costo','Cancela las que no superan el umbral y redirige ese dinero a herramientas de mayor impacto']}
+    ]}
+  ];
+  const sorted2=[...sc.entries()].sort((a,b)=>a[1]-b[1]);
+  const w1=sorted2[0][0], w2=sorted2[1][0], w3=sorted2[2][0];
+  const rm=[
+    {cls:'phase-mes1',label:'MES 1 - SEMANAS 1 A 4',title:'Foco: '+sections[w1].label,
+     tasks:[rmT[w1].m1[0], rmT[w1].m1[1], rmT[w2].m1[0]]},
+    {cls:'phase-mes2',label:'MES 2 - SEMANAS 5 A 8',title:'Foco: '+sections[w2].label+' y '+sections[w3].label,
+     tasks:[rmT[w2].m2[0], rmT[w2].m2[1], rmT[w3].m2[0]]},
+    {cls:'phase-mes3',label:'MES 3 - SEMANAS 9 A 12',title:'Foco: Escalar con Control',
+     tasks:[rmT[w1].m3[0], rmT[w2].m3[0], rmT[w3].m3[0]]}
+  ];
+  const renderTask=t=>'<div class="roadmap-task"><div class="roadmap-task-title">'+t.t+'</div><div class="roadmap-steps">'+t.s.map(s=>'<div class="roadmap-step">'+s+'</div>').join('')+'</div></div>';
+  document.getElementById('roadmap-phases').innerHTML=rm.map(p=>'<div class="roadmap-phase '+p.cls+'"><div class="roadmap-phase-label">'+p.label+'</div><div class="roadmap-phase-title">'+p.title+'</div>'+p.tasks.map(renderTask).join('')+'</div>').join('');
+
+  // ROI
+  if(freeMode){
+    const roiSection=document.getElementById('roi-timeline').closest('.result-card')||document.getElementById('roi-timeline').parentElement;
+    roiSection.style.display='none';
+  }else{
+    const rates=[0.15,0.28,0.42,0.58,0.72,0.85],months=['Mes 1','Mes 2','Mes 3','Mes 4','Mes 5','Mes 6'];
+    let acc=0;
+    const rows=rates.map((r,i)=>{const m=Math.round(total*r);acc+=m;return{label:months[i],m,pct:Math.round(r*100)};});
+    document.getElementById('roi-timeline').innerHTML=rows.map(r=>'<div class="roi-row"><div class="roi-month">'+r.label+'</div><div class="roi-bar-wrap"><div class="roi-bar-fill" style="width:0%" data-width="'+r.pct+'%"></div></div><div class="roi-amount">+'+fmt(r.m)+'/mes</div></div>').join('');
+    setTimeout(()=>{document.querySelectorAll('.roi-bar-fill').forEach(el=>{el.style.width=el.dataset.width;});},400);
+    document.getElementById('roi-total').textContent=fmt(acc);
+    document.getElementById('roi-inversion').textContent=fmt(37)+' (este diagnostico)';
+  }
+
+  // PLAN DE ACCION
+  const apSection=document.getElementById('action-plan');
+  if(freeMode && apSection){
+    const parent=apSection.parentElement;
+    parent.innerHTML='<div class="locked-wrap">'+parent.innerHTML+'<div class="locked-overlay"><div style="font-size:2rem;margin-bottom:10px">&#128274;</div><h4>Plan de accion personalizado</h4><p>3 acciones priorizadas por impacto economico, basadas en tus areas de mayor perdida.</p><a href="'+HOTMART_URL+'" target="_blank" style="text-decoration:none"><button class="btn-primary">Desbloquear informe &rarr; $37 USD</button></a></div></div>';
+  }
+
+  // ROADMAP
+  const rmSection=document.getElementById('roadmap-phases');
+  if(freeMode && rmSection){
+    const rParent=rmSection.parentElement;
+    rParent.innerHTML='<div class="locked-wrap">'+rParent.innerHTML+'<div class="locked-overlay"><div style="font-size:2rem;margin-bottom:10px">&#128274;</div><h4>Hoja de ruta 90 dias</h4><p>Plan semana a semana para implementar las mejoras en el orden correcto.</p><a href="'+HOTMART_URL+'" target="_blank" style="text-decoration:none"><button class="btn-primary">Desbloquear informe &rarr; $37 USD</button></a></div></div>';
+  }
+
+  // CTA
+  document.getElementById('cta-section-free').style.display=freeMode?'block':'none';
+  document.getElementById('cta-section-paid').style.display=freeMode?'none':'block';
+
+  // SHARE BOX
+  const shareBox=document.getElementById('share-box');
+  shareBox.style.display='block';
+  document.getElementById('share-url').textContent=generateShareURL();
+}
+
+// Init
+renderRevenueOptions();
+if(!loadFromURL()){document.getElementById('screen-intro').classList.add('active');}
+</script>
+</body>
+</html>
+lay=freeMode?'none':'block';
+}
+
+// Init
+renderRevenueOptions();
+</script>
+</body>
+</html>
+nit
+renderRevenueOptions();
+</script>
+</body>
+</html>
