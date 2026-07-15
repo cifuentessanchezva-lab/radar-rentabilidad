@@ -831,4 +831,13 @@ function buildResults(){
 
   // SHARE BOX
   const shareBox=document.getElementById('share-box');
-  shareBox.style.displa
+  shareBox.style.display='block';
+  document.getElementById('share-url').textContent=generateShareURL();
+}
+
+// Init
+renderRevenueOptions();
+if(!loadFromURL()){document.getElementById('screen-intro').classList.add('active');}
+</script>
+</body>
+</html>
