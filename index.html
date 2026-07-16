@@ -745,7 +745,12 @@ function buildResults(){
   const bizInsight=weakLabel==='finanzas'?biz.priceCtx:weakLabel==='operaciones'?biz.opCtx:weakLabel==='clientes'?biz.retCtx:biz.autoCtx;
   document.getElementById('carta-text').innerHTML=
     '<p>Hola <strong>'+userName+'</strong>, '+biz.intro+' Con una facturacion mensual aproximada de <strong>'+revLabel+'</strong>, hemos calculado el potencial de recuperacion real basado en los resultados de tu evaluacion.</p>'+
-    '<p>Tu fortaleza mas clara esta en <strong>'+sections[bi].label+'</strong>, con un puntaje de '+Math.max(...sc)+'/100. Eso significa que ya tienes una base solida sobre la cual construir.</p>'+
+  const bestScore=Math.max(...sc);
+  const bestSectorAvg=sections[bi].market;
+  const fortalezaP=bestScore>=bestSectorAvg
+    ? '<p>Tu fortaleza mas clara esta en <strong>'+sections[bi].label+'</strong>, con un puntaje de '+bestScore+'/100 — por encima del promedio del sector ('+bestSectorAvg+'/100). Eso significa que ya tienes una base solida sobre la cual construir.</p>'
+    : '<p>Tu area con mejor desempeno es <strong>'+sections[bi].label+'</strong>, con un puntaje de '+bestScore+'/100, aunque aun por debajo del promedio del sector ('+bestSectorAvg+'/100). El plan se enfocara en cerrar las brechas mas grandes, donde el potencial de recuperacion es mas alto.</p>';
+    fortalezaP+
     '<p>Sin embargo, el area que mas te esta costando dinero hoy es <strong>'+sections[wi].label+'</strong>, con un score de '+Math.min(...sc)+'/100. Para tu tipo de negocio, '+bizInsight+' Los benchmarks sectoriales indican que esta brecha representa aproximadamente <strong>'+fmt(lpa[wi])+'</strong> de potencial de recuperacion mensual en tu nivel de facturacion.</p>'+
     '<p>El plan que encontraras a continuacion esta priorizado por impacto economico. Sigue el orden propuesto para maximizar la recuperacion en el menor tiempo posible.</p>';
 
