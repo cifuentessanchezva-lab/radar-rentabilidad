@@ -1024,12 +1024,27 @@ renderRevenueOptions();
       answers=saved.a;
       try{localStorage.removeItem('diagState');}catch(e){}
       history.replaceState({},'',window.location.pathname);
+  if(urlP.get('buy')==='1'){
+    setTimeout(function(){
+      const b=document.createElement('div');
+      b.style.cssText='position:fixed;top:0;left:0;right:0;background:#2A7DD4;color:#fff;text-align:center;padding:14px 20px;font-size:14px;font-weight:500;z-index:9999;box-shadow:0 2px 8px rgba(0,0,0,.2)';
+      b.innerHTML='Completa el diagnóstico (5 min) → ve tu score gratis → desbloquea el reporte completo por $37 USD';
+      document.body.prepend(b);
+    },400);
+  }
       show('screen-results');
       document.getElementById('progress-bar').style.width='100%';
       buildResults();
       if(savedEmail){const paidURL=generateShareURL();sendDiagnosticEmail(paidURL,savedEmail,true);}
     } else {
       document.getElementById('screen-intro').classList.add('active');
+      try{localStorage.setItem('radarPendingPaid','1');}catch(e){}
+      setTimeout(function(){
+        const b=document.createElement('div');
+        b.style.cssText='position:fixed;top:0;left:0;right:0;background:#27AE7A;color:#fff;text-align:center;padding:14px 20px;font-size:14px;font-weight:500;z-index:9999;box-shadow:0 2px 8px rgba(0,0,0,.2)';
+        b.textContent='✓ Pago recibido. Completa el diagnóstico para generar tu reporte completo.';
+        document.body.prepend(b);
+      },400);
     }
   } else if(!loadFromURL()){
     document.getElementById('screen-intro').classList.add('active');
