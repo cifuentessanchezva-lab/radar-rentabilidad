@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Radar de Rentabilidad — Diagnóstico de Rentabilidad</title>
+  <meta name="description" content="Diagnostica en 5 minutos qué áreas están drenando la rentabilidad de tu negocio. Score gratuito + reporte completo por $37 USD.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--navy:#1A2E5A;--blue:#2A7DD4;--emerald:#27AE7A;--gold:#F5A623;--cloud:#F4F6FA;--white:#FFFFFF;--g100:#E2E8F0;--g400:#94A3B8;--g600:#475569;--g900:#0F172A}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Inter',-apple-system,sans-serif;color:var(--g900);background:var(--white)}
+    a{text-decoration:none}
+
+    /* NAV */
+    nav{background:var(--navy);height:56px;display:flex;align-items:center;padding:0 24px;position:sticky;top:0;z-index:100}
+    .nav-in{max-width:1000px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between}
+    .logo{display:flex;align-items:center;gap:10px}
+    .logo-w{color:#fff;font-size:15px;font-weight:500;letter-spacing:1px}
+    .logo-s{color:rgba(255,255,255,.4);font-size:9px;letter-spacing:2px;text-transform:uppercase;display:block}
+    .nav-btn{background:var(--blue);color:#fff;border-radius:6px;padding:8px 16px;font-size:13px;font-weight:500}
+
+    /* HERO */
+    .hero{background:var(--navy);padding:80px 24px 64px;text-align:center}
+    .badge{display:inline-block;background:rgba(39,174,122,.15);color:var(--emerald);border:0.5px solid var(--emerald);border-radius:20px;padding:4px 14px;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:24px}
+    .hero h1{color:#fff;font-size:clamp(26px,5vw,42px);font-weight:500;line-height:1.25;max-width:680px;margin:0 auto 20px}
+    .hero h1 em{color:var(--gold);font-style:normal}
+    .hero p{color:rgba(255,255,255,.65);font-size:16px;line-height:1.7;max-width:500px;margin:0 auto 36px}
+    .hero-ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+    .btn-p{background:var(--blue);color:#fff;border-radius:8px;padding:14px 28px;font-size:15px;font-weight:500;display:inline-block}
+    .btn-o{background:transparent;color:rgba(255,255,255,.75);border:0.5px solid rgba(255,255,255,.3);border-radius:8px;padding:14px 28px;font-size:15px;font-weight:500;display:inline-block}
+    .hero-note{color:rgba(255,255,255,.35);font-size:12px;margin-top:16px}
+
+    /* STATS */
+    .stats{background:var(--cloud);border-bottom:0.5px solid var(--g100);padding:20px 24px}
+    .stats-in{max-width:800px;margin:0 auto;display:flex;justify-content:center;gap:48px;flex-wrap:wrap}
+    .stat-n{font-size:22px;font-weight:500;color:var(--navy);text-align:center}
+    .stat-l{font-size:11px;color:var(--g400);text-transform:uppercase;letter-spacing:1px;margin-top:2px;text-align:center}
+
+    /* SECTIONS */
+    section{padding:72px 24px}
+    .sec{max-width:900px;margin:0 auto}
+    .tag{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--blue);margin-bottom:12px}
+    .ttl{font-size:clamp(22px,4vw,30px);font-weight:500;color:var(--navy);line-height:1.3;margin-bottom:16px}
+    .sub{font-size:15px;color:var(--g600);line-height:1.7;max-width:560px}
+
+    /* PAIN */
+    .pain-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:40px}
+    .pain-c{background:var(--cloud);border-radius:10px;padding:20px 22px;border-left:3px solid var(--gold)}
+    .pain-c strong{color:var(--navy);display:block;margin-bottom:6px;font-size:14px}
+    .pain-c p{font-size:13px;color:var(--g600);line-height:1.6}
+
+    /* STEPS */
+    .how{background:var(--cloud)}
+    .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-top:40px}
+    .step{background:var(--white);border-radius:10px;padding:24px;border:0.5px solid var(--g100)}
+    .step-n{font-size:11px;font-weight:500;color:var(--blue);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+    .step h3{font-size:15px;font-weight:500;color:var(--navy);margin-bottom:8px}
+    .step p{font-size:13px;color:var(--g600);line-height:1.6}
+    .b-free{display:inline-block;margin-top:12px;font-size:10px;padding:3px 10px;border-radius:12px;background:#E6F7F1;color:#0F6E56;border:0.5px solid var(--emerald)}
+    .b-paid{display:inline-block;margin-top:12px;font-size:10px;padding:3px 10px;border-radius:12px;background:#EBF3FC;color:#1A5A9E;border:0.5px solid var(--blue)}
+
+    /* COMPARE */
+    .cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:40px}
+    @media(max-width:600px){.cmp-grid{grid-template-columns:1fr}}
+    .cmp-c{border-radius:10px;padding:28px;border:0.5px solid var(--g100)}
+    .cmp-c.paid{border-color:var(--blue)}
+    .cmp-lbl{font-size:10px;text-transform:uppercase;letter-spacing:2px;margin-bottom:16px}
+    .cmp-lbl.free{color:var(--g400)}.cmp-lbl.paid{color:var(--blue)}
+    .cmp-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:11px;font-size:14px;color:var(--g600)}
+    .cmp-row.dim{opacity:.35}
+    .cmp-row span{flex-shrink:0;margin-top:1px}
+
+    /* AUDIENCE */
+    .aud{background:var(--cloud)}
+    .tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:32px}
+    .atag{background:var(--white);border:0.5px solid var(--g100);border-radius:20px;padding:8px 18px;font-size:13px;color:var(--navy)}
+
+    /* PRICING */
+    .pricing{background:var(--navy);text-align:center}
+    .pricing .ttl{color:#fff}
+    .pricing .sub{color:rgba(255,255,255,.6);margin:0 auto 40px}
+    .p-card{background:var(--white);border-radius:12px;padding:40px 36px;max-width:420px;margin:0 auto}
+    .p-main{font-size:48px;font-weight:500;color:var(--navy);line-height:1;margin-bottom:6px}
+    .p-main span{font-size:20px;color:var(--g400)}
+    .p-note{font-size:12px;color:var(--g400);margin-bottom:28px}
+    .p-item{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--g600);margin-bottom:10px;text-align:left}
+    .p-item::before{content:"✓";color:var(--emerald);font-weight:500;flex-shrink:0}
+    .btn-buy{display:block;background:var(--blue);color:#fff;border-radius:8px;padding:16px;font-size:16px;font-weight:500;margin-top:28px;text-align:center}
+    .p-safe{font-size:11px;color:var(--g400);margin-top:14px}
+
+    /* UPSELL */
+    .upsell{background:var(--cloud);padding:48px 24px;text-align:center;border-top:0.5px solid var(--g100)}
+    .upsell p{font-size:14px;color:var(--g600);max-width:480px;margin:12px auto 16px;line-height:1.7}
+    .upsell a{color:var(--blue);font-weight:500}
+
+    /* FOOTER */
+    footer{background:var(--navy);padding:20px 24px;text-align:center}
+    footer p{color:rgba(255,255,255,.35);font-size:11px;letter-spacing:1px}
+    footer a{color:rgba(255,255,255,.35)}
+
+    @media(max-width:600px){.hero{padding:56px 20px 48px}section{padding:48px 20px}.stats-in{gap:24px}}
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <div class="logo">
+      <svg width="28" height="28" viewBox="0 0 80 80"><circle cx="34" cy="34" r="22" fill="none" stroke="#fff" stroke-width="5"/><circle cx="34" cy="34" r="16" fill="#1A2E5A"/><polyline points="22,40 27,34 32,37 37,28 42,31 47,24" fill="none" stroke="#27AE7A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="50" text-anchor="middle" font-size="13" font-weight="600" fill="#F5A623" font-family="sans-serif">$</text><line x1="50" y1="50" x2="64" y2="64" stroke="#fff" stroke-width="5" stroke-linecap="round"/></svg>
+      <div><span class="logo-w">Radar de Rentabilidad</span><span class="logo-s">Diagnóstico de rentabilidad empresarial</span></div>
+    </div>
+    <a href="https://pay.hotmart.com/J106755421R" class="nav-btn">Reporte completo — $37 USD</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="badge">Diagnóstico de rentabilidad</div>
+  <h1>¿Sabes cuánto dinero estás perdiendo <em>cada mes</em> sin saberlo?</h1>
+  <p>Radar de Rentabilidad identifica en 5 minutos las áreas que drenan tu negocio — y te dice exactamente cuánto puedes recuperar.</p>
+  <div class="hero-ctas">
+    <a href="https://cifuentessanchezva-lab.github.io/radar-rentabilidad/" class="btn-p">Hacer mi diagnóstico gratis →</a>
+    <a href="https://pay.hotmart.com/J106755421R" class="btn-o">Ver reporte completo — $37</a>
+  </div>
+  <p class="hero-note">El diagnóstico inicial es gratuito · El reporte completo se desbloquea por $37 USD</p>
+</section>
+
+<div class="stats">
+  <div class="stats-in">
+    <div><div class="stat-n">5 min</div><div class="stat-l">Para completar</div></div>
+    <div><div class="stat-n">4 áreas</div><div class="stat-l">Evaluadas</div></div>
+    <div><div class="stat-n">$37 USD</div><div class="stat-l">Reporte completo</div></div>
+    <div><div class="stat-n">100%</div><div class="stat-l">Digital e inmediato</div></div>
+  </div>
+</div>
+
+<section>
+  <div class="sec">
+    <div class="tag">El problema</div>
+    <h2 class="ttl">La mayoría de negocios pierde entre 8% y 15% de su facturación en ineficiencias que no ve</h2>
+    <p class="sub">No porque sean malos negocios. Sino porque nadie les ha dicho exactamente dónde está el problema.</p>
+    <div class="pain-grid">
+      <div class="pain-c"><strong>Operaciones</strong><p>Procesos manuales, reprocesos y tiempo perdido que nadie mide.</p></div>
+      <div class="pain-c"><strong>Finanzas</strong><p>Costos ocultos, márgenes que no cuadran, decisiones sin datos.</p></div>
+      <div class="pain-c"><strong>Clientes</strong><p>Alta rotación, bajo valor de vida, propuesta que no retiene.</p></div>
+      <div class="pain-c"><strong>Automatización</strong><p>Tareas repetitivas que consumen horas de tu equipo cada semana.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="how">
+  <div class="sec">
+    <div class="tag">Cómo funciona</div>
+    <h2 class="ttl">Tres pasos. Menos de 10 minutos.</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">Paso 01</div>
+        <h3>Responde el diagnóstico</h3>
+        <p>12 preguntas sobre tu negocio en finanzas, operaciones, clientes y automatización.</p>
+        <span class="b-free">Gratis</span>
+      </div>
+      <div class="step">
+        <div class="step-n">Paso 02</div>
+        <h3>Recibe tu score</h3>
+        <p>Ve en cuál de las 4 fases de rentabilidad está tu negocio y qué áreas necesitan atención.</p>
+        <span class="b-free">Gratis</span>
+      </div>
+      <div class="step">
+        <div class="step-n">Paso 03</div>
+        <h3>Desbloquea el reporte completo</h3>
+        <p>Análisis por área, estimado de pérdida mensual y tu plan de acción con 3 prioridades concretas.</p>
+        <span class="b-paid">$37 USD</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec">
+    <div class="tag">Qué incluye</div>
+    <h2 class="ttl">Score gratuito vs. Reporte completo</h2>
+    <div class="cmp-grid">
+      <div class="cmp-c">
+        <div class="cmp-lbl free">Diagnóstico gratuito</div>
+        <div class="cmp-row"><span>✓</span> Score global de rentabilidad</div>
+        <div class="cmp-row"><span>✓</span> Fase de rentabilidad (4 niveles)</div>
+        <div class="cmp-row"><span>✓</span> Link para guardar tu diagnóstico</div>
+        <div class="cmp-row dim"><span>○</span> Análisis detallado por área</div>
+        <div class="cmp-row dim"><span>○</span> Estimado de pérdida mensual</div>
+        <div class="cmp-row dim"><span>○</span> Plan de acción personalizado</div>
+        <div class="cmp-row dim"><span>○</span> Benchmarks vs. negocios LATAM</div>
+      </div>
+      <div class="cmp-c paid">
+        <div class="cmp-lbl paid">Reporte completo — $37 USD</div>
+        <div class="cmp-row"><span>✓</span> Score global de rentabilidad</div>
+        <div class="cmp-row"><span>✓</span> Fase de rentabilidad (4 niveles)</div>
+        <div class="cmp-row"><span>✓</span> Link permanente a tu reporte</div>
+        <div class="cmp-row"><span>✓</span> <strong>Análisis detallado por área</strong></div>
+        <div class="cmp-row"><span>✓</span> <strong>Estimado de pérdida mensual</strong></div>
+        <div class="cmp-row"><span>✓</span> <strong>Plan de acción personalizado</strong></div>
+        <div class="cmp-row"><span>✓</span> <strong>Benchmarks vs. negocios LATAM</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="aud">
+  <div class="sec">
+    <div class="tag">Para quién es</div>
+    <h2 class="ttl">Diseñado para dueños de negocios de servicios</h2>
+    <p class="sub">Si facturas entre $5.000 y $200.000 USD al mes y sientes que el negocio crece pero los márgenes no mejoran, este diagnóstico es para ti.</p>
+    <div class="tags">
+      <span class="atag">Clínicas y centros médicos</span>
+      <span class="atag">Agencias de servicios</span>
+      <span class="atag">Consultoras</span>
+      <span class="atag">IPS y centros de salud</span>
+      <span class="atag">Empresas de tecnología</span>
+      <span class="atag">Estudios contables y jurídicos</span>
+      <span class="atag">Centros educativos</span>
+      <span class="atag">Servicios B2B en general</span>
+    </div>
+  </div>
+</section>
+
+<section class="pricing">
+  <div class="sec">
+    <div class="tag" style="color:var(--blue)">Precio de lanzamiento</div>
+    <h2 class="ttl">Un reporte que pagarías $300 con un consultor</h2>
+    <p class="sub">Disponible ahora por $37 USD. Acceso inmediato, sin suscripción.</p>
+    <div class="p-card">
+      <div class="p-main">$37 <span>USD</span></div>
+      <div class="p-note">Pago único · Acceso inmediato · Sin suscripción</div>
+      <div class="p-item">Análisis completo de las 4 áreas críticas</div>
+      <div class="p-item">Estimado de pérdida mensual personalizado</div>
+      <div class="p-item">Plan de acción con 3 prioridades concretas</div>
+      <div class="p-item">Benchmarks vs. negocios similares en LATAM</div>
+      <div class="p-item">Link permanente para compartir y volver a consultar</div>
+      <a href="https://pay.hotmart.com/J106755421R" class="btn-buy">Obtener mi reporte completo →</a>
+      <p class="p-safe">Pago seguro procesado por Hotmart · Acceso inmediato</p>
+    </div>
+  </div>
+</section>
+
+<div class="upsell">
+  <svg width="36" height="36" viewBox="0 0 80 80"><circle cx="34" cy="34" r="22" fill="none" stroke="#1A2E5A" stroke-width="5"/><circle cx="34" cy="34" r="16" fill="#F4F6FA"/><polyline points="22,40 27,34 32,37 37,28 42,31 47,24" fill="none" stroke="#27AE7A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="50" text-anchor="middle" font-size="13" font-weight="600" fill="#F5A623" font-family="sans-serif">$</text><line x1="50" y1="50" x2="64" y2="64" stroke="#1A2E5A" stroke-width="5" stroke-linecap="round"/></svg>
+  <p>El Radar te muestra el diagnóstico macro. <strong><a href="https://www.focusrentabilidad.com">FOCUS</a></strong> va un nivel más profundo: rentabilidad exacta por servicio y contrato, con datos reales de tu contabilidad.</p>
+  <a href="https://www.focusrentabilidad.com" style="color:var(--blue);font-size:13px">Conocer FOCUS →</a>
+</div>
+
+<footer>
+  <p>FOCUS — Illuminating Profitability · <a href="https://www.focusrentabilidad.com">focusrentabilidad.com</a></p>
+</footer>
+
+</body>
+  </html>
