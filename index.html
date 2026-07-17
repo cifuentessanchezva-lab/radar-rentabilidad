@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Radar de Rentabilidad â FOCUS</title>
+<title>Radar de Rentabilidad — FOCUS</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>emailjs.init('-i5RxyMvUzyp2FgAB');</script>
@@ -18,7 +18,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 .container{max-width:720px;width:100%;}
 #screen-intro{background:radial-gradient(ellipse at 60% 0%,#1a2a4a 0%,var(--bg) 60%);}
 .badge{display:inline-flex;align-items:center;gap:8px;background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3);color:var(--accent);padding:6px 16px;border-radius:100px;font-size:.8rem;font-weight:600;letter-spacing:.05em;margin-bottom:28px;}
-.badge::before{content:'â';font-size:.5rem;}
+.badge::before{content:'●';font-size:.5rem;}
 h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:800;line-height:1.1;margin-bottom:20px;text-align:center;}
 h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .subtitle{text-align:center;}
@@ -197,10 +197,10 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
 .roadmap-phase-title{font-size:.95rem;font-weight:700;margin-bottom:16px;text-align:center;line-height:1.3;}
 .roadmap-task{margin-bottom:14px;}
 .roadmap-task-title{display:flex;gap:8px;font-size:.85rem;font-weight:600;color:var(--text);margin-bottom:6px;line-height:1.4;}
-.roadmap-task-title::before{content:'â¸';color:var(--accent);flex-shrink:0;}
+.roadmap-task-title::before{content:'▸';color:var(--accent);flex-shrink:0;}
 .roadmap-steps{display:flex;flex-direction:column;gap:4px;padding-left:16px;}
 .roadmap-step{font-size:.76rem;color:var(--muted);line-height:1.4;display:flex;gap:6px;}
-.roadmap-step::before{content:'Â·';color:var(--accent);flex-shrink:0;font-weight:900;}
+.roadmap-step::before{content:'·';color:var(--accent);flex-shrink:0;font-weight:900;}
 .roadmap-focus-note{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.25);border-radius:12px;padding:14px 18px;margin-bottom:20px;font-size:.82rem;color:var(--muted);line-height:1.6;text-align:center;}
 .roadmap-focus-note strong{color:var(--gold);}
 .roi-section{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px;margin-bottom:32px;}
@@ -233,7 +233,7 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
 .delay-3{animation-delay:.3s;opacity:0;}
 .delay-4{animation-delay:.4s;opacity:0;}
 
-/* ââ FOCUS UPSELL âââââââââââââââââââââââââââââââââ */
+/* ── FOCUS UPSELL ───────────────────────────────── */
 .focus-upsell{background:#1A2E5A;border-radius:16px;padding:36px 28px;margin-top:32px;text-align:center;color:#fff;}
 .focus-upsell-header{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:22px;}
 .focus-upsell h3{font-size:1.2rem;font-weight:700;margin-bottom:12px;line-height:1.45;color:#fff;}
@@ -274,7 +274,7 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
         <button class="currency-btn" onclick="setCurrency('CLP')" id="cur-CLP">CLP</button>
       </div>
     </div>
-    <button class="btn-primary" onclick="show('screen-context')">Iniciar mi diagnostico â</button>
+    <button class="btn-primary" onclick="show('screen-context')">Iniciar mi diagnostico →</button>
     <div class="trust">100% gratuito &middot; Resultados inmediatos &middot; Sin tarjeta de credito</div>
   </div>
 </div>
@@ -302,7 +302,7 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
       </div>
 
       <div class="ctx-block">
-        <div class="ctx-label">Â¿Que tipo de negocio tienes?</div>
+        <div class="ctx-label">¿Que tipo de negocio tienes?</div>
         <div class="ctx-options" id="biztype-options">
           <div class="ctx-option" onclick="selectBizType('servicios',this)"><div class="ctx-option-label">Servicios Profesionales</div><div class="ctx-option-sub">Consultor, coach, freelancer, asesor</div><div class="ctx-check"></div></div>
           <div class="ctx-option" onclick="selectBizType('comercio',this)"><div class="ctx-option-label">Comercio / Retail</div><div class="ctx-option-sub">Tienda fisica o en linea de productos</div><div class="ctx-check"></div></div>
@@ -341,7 +341,7 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
 <div id="screen-email" class="screen">
   <div class="container" style="max-width:520px">
     <div class="email-card">
-      <div style="font-size:2.5rem;margin-bottom:16px">ð</div>
+      <div style="font-size:2.5rem;margin-bottom:16px">🔍</div>
       <h2>Tu diagnostico esta listo</h2>
       <p style="color:var(--muted);margin-bottom:8px">Calculado sobre tu facturacion declarada. Potencial de recuperacion mensual:</p>
       <div class="teaser-number" id="teaser-loss">---</div>
@@ -392,7 +392,7 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
     </div>
     <div id="phase-banner" class="phase-banner fade-up"></div>
     <div class="share-box fade-up" id="share-box" style="display:none">
-      <div style="font-size:.8rem;color:var(--muted);flex-basis:100%;margin-bottom:4px;">&#128279; <strong style="color:var(--text)">Guarda o comparte tu diagnostico</strong> â este link reconstruye tus resultados exactos:</div>
+      <div style="font-size:.8rem;color:var(--muted);flex-basis:100%;margin-bottom:4px;">&#128279; <strong style="color:var(--text)">Guarda o comparte tu diagnostico</strong> — este link reconstruye tus resultados exactos:</div>
       <div class="share-url" id="share-url">Generando link...</div>
       <button class="btn-copy" onclick="copyShareLink()">Copiar link</button>
       <button class="btn-pdf" onclick="window.print()">Descargar PDF</button>
@@ -473,7 +473,7 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
       <strong>Metodologia:</strong> Los porcentajes de recuperacion por area se basan en benchmarks de ineficiencia empresarial de McKinsey Global Institute, Bain &amp; Company y Deloitte. Los montos son estimaciones conservadoras calculadas sobre tu rango de facturacion declarado y escaladas segun tu score en cada area.
     </div>
     <div id="cta-section-free" class="cta-section fade-up delay-4" style="display:none">
-      <div style="font-size:2rem;margin-bottom:10px">ð</div>
+      <div style="font-size:2rem;margin-bottom:10px">🔒</div>
       <h3>Tu plan de accion esta bloqueado</h3>
       <p style="margin-bottom:6px">Ya tienes tu potencial de recuperacion. El informe completo te dice exactamente <strong style="color:var(--text)">donde esta la oportunidad y como capturarla</strong> &mdash; con un plan priorizado por impacto economico real.</p>
       <p style="font-size:.85rem;color:var(--muted);margin-bottom:20px">Equivalente a menos de 30 minutos con un consultor especializado en rentabilidad. Precio de lanzamiento:</p>
@@ -526,12 +526,12 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
         </div>
       </div>
       <h3>Tu Radar detecto donde esta el problema.<br>FOCUS te dice exactamente cuanto te cuesta.</h3>
-      <p>El Radar identifica en que areas sangra tu rentabilidad a nivel macro. FOCUS va un nivel mas profundo: te muestra cuanto gana o pierde cada servicio o contrato con datos reales de tu contabilidad â para tomar decisiones con precision.</p>
+      <p>El Radar identifica en que areas sangra tu rentabilidad a nivel macro. FOCUS va un nivel mas profundo: te muestra cuanto gana o pierde cada servicio o contrato con datos reales de tu contabilidad — para tomar decisiones con precision.</p>
       <div class="focus-features">
-        <div><span>â¦</span>Rentabilidad por servicio y contrato</div>
-        <div><span>â¦</span>Asignacion de costos por absorcion</div>
-        <div><span>â¦</span>Dashboard de margenes en tiempo real</div>
-        <div><span>â¦</span>Decisiones con datos, no con intuicion</div>
+        <div><span>✦</span>Rentabilidad por servicio y contrato</div>
+        <div><span>✦</span>Asignacion de costos por absorcion</div>
+        <div><span>✦</span>Dashboard de margenes en tiempo real</div>
+        <div><span>✦</span>Decisiones con datos, no con intuicion</div>
       </div>
       <a href="https://www.focusrentabilidad.com" target="_blank" style="text-decoration:none">
         <button class="btn-focus">Conocer FOCUS &rarr;</button>
@@ -594,25 +594,25 @@ function selectBizType(type,el){
 
 // SECTIONS & QUESTIONS
 const sections=[
-  {id:'finanzas',    label:'Finanzas y Precios',    icon:'ð°',color:'#3b82f6',market:62, lossPct:0.08},
-  {id:'operaciones', label:'Operaciones y Tiempo',   icon:'âï¸',color:'#6366f1',market:55, lossPct:0.12},
-  {id:'clientes',    label:'Clientes y Retencion',   icon:'ð¤',color:'#10b981',market:58, lossPct:0.10},
-  {id:'automatizacion',label:'Automatizacion e IA', icon:'ð¤',color:'#f59e0b',market:40, lossPct:0.07}
+  {id:'finanzas',    label:'Finanzas y Precios',    icon:'💰',color:'#3b82f6',market:62, lossPct:0.08},
+  {id:'operaciones', label:'Operaciones y Tiempo',   icon:'⚙️',color:'#6366f1',market:55, lossPct:0.12},
+  {id:'clientes',    label:'Clientes y Retencion',   icon:'🤝',color:'#10b981',market:58, lossPct:0.10},
+  {id:'automatizacion',label:'Automatizacion e IA', icon:'🤖',color:'#f59e0b',market:40, lossPct:0.07}
 ];
 
 const questions=[
-  {section:0,icon:'ð°',text:'Como defines el precio de tus productos o servicios?',sub:'El metodo de fijacion de precios es el factor mas determinante de la rentabilidad.',options:[{text:'Calculo costos + margen deseado con analisis de mercado',score:100},{text:'Miro lo que cobra la competencia y me ajusto',score:55},{text:'Cobro lo que el cliente parece dispuesto a pagar',score:35},{text:'No tengo un metodo claro, voy caso a caso',score:10}]},
-  {section:0,icon:'ð',text:'Con que frecuencia revisas tus margenes de rentabilidad por producto o servicio?',sub:'La mayoria de negocios tienen servicios que en realidad generan perdidas.',options:[{text:'Mensualmente con dashboard de metricas',score:100},{text:'Trimestralmente o cuando surge un problema',score:60},{text:'Anualmente al hacer el balance',score:30},{text:'No los reviso de forma sistematica',score:5}]},
-  {section:0,icon:'ð',text:'Cuanto representa el descuento promedio que otorgas sobre tu precio de lista?',sub:'Los descuentos no controlados son uno de los principales destructores de margen.',options:[{text:'Menos del 5% - tengo politica de precios firme',score:100},{text:'Entre 5-15% - negocio caso a caso',score:65},{text:'Entre 15-30% - con frecuencia cedo a la presion',score:30},{text:'Mas del 30% o no lo tengo claro',score:10}]},
-  {section:1,icon:'â±ï¸',text:'Cuantas horas semanales dedicas a tareas administrativas repetitivas?',sub:'Reportes, facturacion, seguimiento manual, coordinar por WhatsApp...',options:[{text:'Menos de 3h - procesos y herramientas bien configurados',score:100},{text:'Entre 3-8h - algo automatizado pero aun hay trabajo manual',score:60},{text:'Entre 8-15h - consume parte importante de mi semana',score:25},{text:'Mas de 15h - estoy atrapado en lo operativo',score:5}]},
-  {section:1,icon:'ð',text:'Tienes procesos documentados y estandarizados en tu negocio?',sub:'Los procesos documentados permiten escalar, delegar y mantener calidad constante.',options:[{text:'Si, todo documentado y el equipo los sigue',score:100},{text:'Parcialmente - algunos procesos clave documentados',score:55},{text:'Poco - depende del conocimiento de personas clave',score:25},{text:'No, cada quien trabaja como mejor le parece',score:5}]},
-  {section:1,icon:'ð',text:'Como manejas las tareas que se repiten cada semana?',sub:'Reportes, cotizaciones, seguimientos, publicaciones, facturacion...',options:[{text:'Automatizadas o delegadas con checklist claro',score:100},{text:'Delegadas pero sin mucho control',score:55},{text:'Las hago yo mismo cada vez desde cero',score:20},{text:'Se hacen cuando hay tiempo o se recuerdan',score:5}]},
-  {section:2,icon:'ð',text:'Que porcentaje de tus clientes vuelve a comprarte o renueva contrato?',sub:'La retencion es hasta 7x mas rentable que adquirir un cliente nuevo. (Bain & Company)',options:[{text:'Mas del 70% - alta fidelizacion',score:100},{text:'Entre 40-70% - retencion moderada',score:60},{text:'Entre 20-40% - la mayoria no regresa',score:25},{text:'Menos del 20% o no lo mido',score:5}]},
-  {section:2,icon:'ð',text:'Tienes un sistema para dar seguimiento a prospectos que no cerraron?',sub:'El 80% de las ventas se cierra entre el 5to y 12vo contacto.',options:[{text:'Si, CRM con flujos de seguimiento automatico',score:100},{text:'Lo hacemos manualmente pero de forma consistente',score:55},{text:'Hacemos uno o dos seguimientos y lo dejamos',score:20},{text:'Si no responden, los damos por perdidos',score:5}]},
-  {section:2,icon:'ð',text:'Ofreces servicios adicionales o upgrades a tus clientes actuales?',sub:'El upsell a clientes existentes tiene costo de venta casi nulo.',options:[{text:'Si, estrategia de upsell aplicada sistematicamente',score:100},{text:'Ocasionalmente cuando surge la oportunidad',score:50},{text:'Rara vez - no queremos parecer insistentes',score:20},{text:'No, cada cliente compra lo que pide y ya',score:5}]},
-  {section:3,icon:'ð¤',text:'Que tan avanzado es el uso de herramientas digitales en tu negocio?',sub:'CRM, email marketing, facturacion, gestion de proyectos, IA...',options:[{text:'Avanzado - herramientas integradas con IA',score:100},{text:'Intermedio - algunas herramientas, poco integradas',score:60},{text:'Basico - email, WhatsApp y Excel principalmente',score:25},{text:'Minimo - casi todo manual o en papel',score:5}]},
-  {section:3,icon:'ð±',text:'Cuanto de tu comunicacion con clientes esta automatizada?',sub:'Confirmaciones, recordatorios, follow-ups post-compra...',options:[{text:'Gran parte - flujos automaticos bien configurados',score:100},{text:'Algo - algunos mensajes automaticos pero incompleto',score:55},{text:'Poco - principalmente manual con algunas plantillas',score:20},{text:'Nada - todo a mano cada vez',score:5}]},
-  {section:3,icon:'ð',text:'Usas datos y metricas para tomar decisiones en tu negocio?',sub:'Ventas, conversion, costo de adquisicion, margen por producto...',options:[{text:'Si, KPIs definidos y dashboards actualizados',score:100},{text:'Parcialmente - miro algunas metricas sin sistema',score:55},{text:'Poco - me guio mas por intuicion',score:20},{text:'No tengo claridad sobre las metricas de mi negocio',score:5}]}
+  {section:0,icon:'💰',text:'Como defines el precio de tus productos o servicios?',sub:'El metodo de fijacion de precios es el factor mas determinante de la rentabilidad.',options:[{text:'Calculo costos + margen deseado con analisis de mercado',score:100},{text:'Miro lo que cobra la competencia y me ajusto',score:55},{text:'Cobro lo que el cliente parece dispuesto a pagar',score:35},{text:'No tengo un metodo claro, voy caso a caso',score:10}]},
+  {section:0,icon:'📊',text:'Con que frecuencia revisas tus margenes de rentabilidad por producto o servicio?',sub:'La mayoria de negocios tienen servicios que en realidad generan perdidas.',options:[{text:'Mensualmente con dashboard de metricas',score:100},{text:'Trimestralmente o cuando surge un problema',score:60},{text:'Anualmente al hacer el balance',score:30},{text:'No los reviso de forma sistematica',score:5}]},
+  {section:0,icon:'📉',text:'Cuanto representa el descuento promedio que otorgas sobre tu precio de lista?',sub:'Los descuentos no controlados son uno de los principales destructores de margen.',options:[{text:'Menos del 5% - tengo politica de precios firme',score:100},{text:'Entre 5-15% - negocio caso a caso',score:65},{text:'Entre 15-30% - con frecuencia cedo a la presion',score:30},{text:'Mas del 30% o no lo tengo claro',score:10}]},
+  {section:1,icon:'⏱️',text:'Cuantas horas semanales dedicas a tareas administrativas repetitivas?',sub:'Reportes, facturacion, seguimiento manual, coordinar por WhatsApp...',options:[{text:'Menos de 3h - procesos y herramientas bien configurados',score:100},{text:'Entre 3-8h - algo automatizado pero aun hay trabajo manual',score:60},{text:'Entre 8-15h - consume parte importante de mi semana',score:25},{text:'Mas de 15h - estoy atrapado en lo operativo',score:5}]},
+  {section:1,icon:'📋',text:'Tienes procesos documentados y estandarizados en tu negocio?',sub:'Los procesos documentados permiten escalar, delegar y mantener calidad constante.',options:[{text:'Si, todo documentado y el equipo los sigue',score:100},{text:'Parcialmente - algunos procesos clave documentados',score:55},{text:'Poco - depende del conocimiento de personas clave',score:25},{text:'No, cada quien trabaja como mejor le parece',score:5}]},
+  {section:1,icon:'🔁',text:'Como manejas las tareas que se repiten cada semana?',sub:'Reportes, cotizaciones, seguimientos, publicaciones, facturacion...',options:[{text:'Automatizadas o delegadas con checklist claro',score:100},{text:'Delegadas pero sin mucho control',score:55},{text:'Las hago yo mismo cada vez desde cero',score:20},{text:'Se hacen cuando hay tiempo o se recuerdan',score:5}]},
+  {section:2,icon:'🔄',text:'Que porcentaje de tus clientes vuelve a comprarte o renueva contrato?',sub:'La retencion es hasta 7x mas rentable que adquirir un cliente nuevo. (Bain & Company)',options:[{text:'Mas del 70% - alta fidelizacion',score:100},{text:'Entre 40-70% - retencion moderada',score:60},{text:'Entre 20-40% - la mayoria no regresa',score:25},{text:'Menos del 20% o no lo mido',score:5}]},
+  {section:2,icon:'📞',text:'Tienes un sistema para dar seguimiento a prospectos que no cerraron?',sub:'El 80% de las ventas se cierra entre el 5to y 12vo contacto.',options:[{text:'Si, CRM con flujos de seguimiento automatico',score:100},{text:'Lo hacemos manualmente pero de forma consistente',score:55},{text:'Hacemos uno o dos seguimientos y lo dejamos',score:20},{text:'Si no responden, los damos por perdidos',score:5}]},
+  {section:2,icon:'💎',text:'Ofreces servicios adicionales o upgrades a tus clientes actuales?',sub:'El upsell a clientes existentes tiene costo de venta casi nulo.',options:[{text:'Si, estrategia de upsell aplicada sistematicamente',score:100},{text:'Ocasionalmente cuando surge la oportunidad',score:50},{text:'Rara vez - no queremos parecer insistentes',score:20},{text:'No, cada cliente compra lo que pide y ya',score:5}]},
+  {section:3,icon:'🤖',text:'Que tan avanzado es el uso de herramientas digitales en tu negocio?',sub:'CRM, email marketing, facturacion, gestion de proyectos, IA...',options:[{text:'Avanzado - herramientas integradas con IA',score:100},{text:'Intermedio - algunas herramientas, poco integradas',score:60},{text:'Basico - email, WhatsApp y Excel principalmente',score:25},{text:'Minimo - casi todo manual o en papel',score:5}]},
+  {section:3,icon:'📱',text:'Cuanto de tu comunicacion con clientes esta automatizada?',sub:'Confirmaciones, recordatorios, follow-ups post-compra...',options:[{text:'Gran parte - flujos automaticos bien configurados',score:100},{text:'Algo - algunos mensajes automaticos pero incompleto',score:55},{text:'Poco - principalmente manual con algunas plantillas',score:20},{text:'Nada - todo a mano cada vez',score:5}]},
+  {section:3,icon:'📈',text:'Usas datos y metricas para tomar decisiones en tu negocio?',sub:'Ventas, conversion, costo de adquisicion, margen por producto...',options:[{text:'Si, KPIs definidos y dashboards actualizados',score:100},{text:'Parcialmente - miro algunas metricas sin sistema',score:55},{text:'Poco - me guio mas por intuicion',score:20},{text:'No tengo claridad sobre las metricas de mi negocio',score:5}]}
 ];
 
 let currentQ=0,answers=new Array(questions.length).fill(null),userName='',freeMode=true;
@@ -644,7 +644,7 @@ function selectOption(i){answers[currentQ]=i;renderQuestion();}
 function nextQuestion(){if(answers[currentQ]===null)return;if(currentQ<questions.length-1){currentQ++;renderQuestion();}else showEmailGate();}
 function prevQuestion(){if(currentQ>0){currentQ--;renderQuestion();}}
 
-// COMPUTE â anchored to declared revenue + real benchmarks
+// COMPUTE — anchored to declared revenue + real benchmarks
 function computeResults(){
   const sc=[0,1,2,3].map(s=>{
     const idx=questions.reduce((a,q,i)=>q.section===s?[...a,i]:a,[]);
@@ -762,10 +762,10 @@ function buildResults(){
 
   // FASE
   const phases=[
-    {min:80,label:'FASE ELITE',title:'Negocio de Alto Rendimiento',desc:'Estas en el top 10% de empresas de tu categoria. Tu enfoque ahora es escalar con sistemas y proteger los margenes que ya tienes.',icon:'ð',bg:'linear-gradient(135deg,#065f46,#047857)',color:'#34d399'},
-    {min:60,label:'FASE CRECIMIENTO',title:'Negocio con Potencial Activo',desc:'Tienes bases solidas pero hay fugas claras de rentabilidad. Con los ajustes correctos puedes crecer 30-50% sin aumentar tus costos fijos.',icon:'ð',bg:'linear-gradient(135deg,#1e3a5f,#1d4ed8)',color:'#60a5fa'},
-    {min:40,label:'FASE ESTABILIZACION',title:'Negocio en Punto de Quiebre',desc:'Tu empresa funciona pero opera al limite. Sin intervencion en los proximos 90 dias, la presion sobre los margenes se volvera insostenible.',icon:'â ï¸',bg:'linear-gradient(135deg,#431407,#c2410c)',color:'#fb923c'},
-    {min:0, label:'FASE CRITICA',title:'Negocio en Alerta Maxima',desc:'Hay sangrado activo de rentabilidad en multiples frentes. La prioridad es detener las perdidas inmediatas antes de pensar en crecer.',icon:'ð¨',bg:'linear-gradient(135deg,#450a0a,#b91c1c)',color:'#f87171'}
+    {min:80,label:'FASE ELITE',title:'Negocio de Alto Rendimiento',desc:'Estas en el top 10% de empresas de tu categoria. Tu enfoque ahora es escalar con sistemas y proteger los margenes que ya tienes.',icon:'🏆',bg:'linear-gradient(135deg,#065f46,#047857)',color:'#34d399'},
+    {min:60,label:'FASE CRECIMIENTO',title:'Negocio con Potencial Activo',desc:'Tienes bases solidas pero hay fugas claras de rentabilidad. Con los ajustes correctos puedes crecer 30-50% sin aumentar tus costos fijos.',icon:'🚀',bg:'linear-gradient(135deg,#1e3a5f,#1d4ed8)',color:'#60a5fa'},
+    {min:40,label:'FASE ESTABILIZACION',title:'Negocio en Punto de Quiebre',desc:'Tu empresa funciona pero opera al limite. Sin intervencion en los proximos 90 dias, la presion sobre los margenes se volvera insostenible.',icon:'⚠️',bg:'linear-gradient(135deg,#431407,#c2410c)',color:'#fb923c'},
+    {min:0, label:'FASE CRITICA',title:'Negocio en Alerta Maxima',desc:'Hay sangrado activo de rentabilidad en multiples frentes. La prioridad es detener las perdidas inmediatas antes de pensar en crecer.',icon:'🚨',bg:'linear-gradient(135deg,#450a0a,#b91c1c)',color:'#f87171'}
   ];
   const phase=phases.find(p=>overall>=p.min);
   const pb=document.getElementById('phase-banner');
@@ -776,7 +776,7 @@ function buildResults(){
   const wi=sc.indexOf(Math.min(...sc)),bi=sc.indexOf(Math.max(...sc));
   const revLabel=fmt(selectedRevenue)+'/mes';
   const bizCtx={
-    servicios:{intro:'Para un negocio de servicios profesionales como el tuyo,',priceCtx:'la fijacion de precios basada en valor âno en horasâ es el mayor palanca de rentabilidad.',retCtx:'la retencion de clientes y los ingresos recurrentes son la diferencia entre crecer y sobrevivir.',opCtx:'cada hora que no se factura es ingreso perdido para siempre.',autoCtx:'las herramientas de automatizacion liberan tiempo que se convierte directamente en mas ingresos.'},
+    servicios:{intro:'Para un negocio de servicios profesionales como el tuyo,',priceCtx:'la fijacion de precios basada en valor —no en horas— es el mayor palanca de rentabilidad.',retCtx:'la retencion de clientes y los ingresos recurrentes son la diferencia entre crecer y sobrevivir.',opCtx:'cada hora que no se factura es ingreso perdido para siempre.',autoCtx:'las herramientas de automatizacion liberan tiempo que se convierte directamente en mas ingresos.'},
     comercio:{intro:'Para un negocio de comercio o retail como el tuyo,',priceCtx:'el control de margenes por producto y la gestion del inventario determinan si el negocio es rentable o solo activo.',retCtx:'el ticket promedio y la frecuencia de compra son los motores de crecimiento mas subestimados.',opCtx:'los procesos de compra, recepcion y despacho concentran la mayor parte de las perdidas ocultas.',autoCtx:'la digitalizacion del punto de venta y el seguimiento de stock son pasos criticos para escalar.'},
     restaurante:{intro:'Para un negocio de restaurante o food service como el tuyo,',priceCtx:'el costo de materia prima y el control de merma son los factores que mas impactan tu margen real.',retCtx:'la experiencia del cliente y la frecuencia de regreso determinan tu capacidad de facturar de forma sostenida.',opCtx:'los procesos de cocina, servicio y cierre de caja son donde mas se pierden tiempo y dinero.',autoCtx:'la digitalizacion del pedido y el control de inventario en tiempo real pueden transformar la rentabilidad del negocio.'},
     agencia:{intro:'Para una agencia o consultoria como la tuya,',priceCtx:'el precio por proyecto vs precio por valor entregado es la diferencia entre crecer y quedar atrapado en el intercambio horas-dinero.',retCtx:'la retencion de cuentas y la expansion de servicios dentro del mismo cliente es tu palanca mas eficiente.',opCtx:'la entrega de proyectos y el onboarding de clientes concentran la mayoria de las ineficiencias.',autoCtx:'la estandarizacion de procesos y uso de IA puede duplicar tu capacidad sin contratar.'},
@@ -788,7 +788,7 @@ function buildResults(){
   const bestScore=Math.max(...sc);
   const bestSectorAvg=sections[bi].market;
   const fortalezaP=bestScore>=bestSectorAvg
-    ? '<p>Tu fortaleza mas clara esta en <strong>'+sections[bi].label+'</strong>, con un puntaje de '+bestScore+'/100 â por encima del promedio del sector ('+bestSectorAvg+'/100). Eso significa que ya tienes una base solida sobre la cual construir.</p>'
+    ? '<p>Tu fortaleza mas clara esta en <strong>'+sections[bi].label+'</strong>, con un puntaje de '+bestScore+'/100 — por encima del promedio del sector ('+bestSectorAvg+'/100). Eso significa que ya tienes una base solida sobre la cual construir.</p>'
     : '<p>Tu area con mejor desempeno es <strong>'+sections[bi].label+'</strong>, con un puntaje de '+bestScore+'/100, aunque aun por debajo del promedio del sector ('+bestSectorAvg+'/100). El plan se enfocara en cerrar las brechas mas grandes, donde el potencial de recuperacion es mas alto.</p>';
   document.getElementById('carta-text').innerHTML=
     '<p>Hola <strong>'+userName+'</strong>, '+biz.intro+' Con una facturacion mensual de <strong>'+revLabel+'</strong> y aproximadamente <strong>'+selectedClients+' clientes activos</strong>, hemos calculado el potencial de recuperacion real basado en los resultados de tu evaluacion.</p>'+
@@ -810,9 +810,9 @@ function buildResults(){
   document.getElementById('score-level').style.color=sc2;
   let sv=0;const si2=setInterval(()=>{sv+=2;if(sv>=overall){sv=overall;clearInterval(si2);}se.textContent=sv;ci.style.strokeDashoffset=C-(C*sv/100);},20);
 
-  // PERDIDA â solo en modo pago
+  // PERDIDA — solo en modo pago
   if(freeMode){
-    document.getElementById('loss-display').textContent='ð Bloqueado';
+    document.getElementById('loss-display').textContent='🔒 Bloqueado';
     document.getElementById('loss-year-display').textContent='Desbloquea el informe completo para ver el impacto economico exacto.';
     document.getElementById('loss-note').textContent='';
   }else{
@@ -1024,7 +1024,7 @@ renderRevenueOptions();
     setTimeout(function(){
       const b=document.createElement('div');
       b.style.cssText='position:fixed;top:0;left:0;right:0;background:#2A7DD4;color:#fff;text-align:center;padding:14px 20px;font-size:14px;font-weight:500;z-index:9999;box-shadow:0 2px 8px rgba(0,0,0,.2)';
-      b.innerHTML='Completa el diagnÃ³stico (5 min) â ve tu score gratis â desbloquea el reporte completo por $37 USD';
+      b.innerHTML='Completa el diagnóstico (5 min) → ve tu score gratis → desbloquea el reporte completo por $37 USD';
       document.body.prepend(b);
     },400);
   }
@@ -1038,7 +1038,7 @@ renderRevenueOptions();
       setTimeout(function(){
         const b=document.createElement('div');
         b.style.cssText='position:fixed;top:0;left:0;right:0;background:#27AE7A;color:#fff;text-align:center;padding:14px 20px;font-size:14px;font-weight:500;z-index:9999;box-shadow:0 2px 8px rgba(0,0,0,.2)';
-        b.textContent='â Pago recibido. Completa el diagnÃ³stico para generar tu reporte completo.';
+        b.textContent='✓ Pago recibido. Completa el diagnóstico para generar tu reporte completo.';
         document.body.prepend(b);
       },400);
     }
