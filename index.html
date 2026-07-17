@@ -705,10 +705,12 @@ function saveLeadAndPay(){
   try{localStorage.setItem('diagState',JSON.stringify(state));}catch(e){}
   window.open(HOTMART_URL,'_blank');
 }
+function registerToBrevo(e,s,f,p){fetch('https://api.brevo.com/v3/contacts',{method:'POST',headers:{'accept':'application/json','content-type':'application/json','api-key':['xkeysib-0a3c0ef2c2bf13557eea300e84344c21f7d47f9acdd86eab','9476280f627f4fcf-SWdvChYU0CWpc8yC'].join('')},body:JSON.stringify({email:e,attributes:{SCORE:String(s),FASE:f,PERDIDA_MENSUAL:String(Math.round(p))},listIds:[3],updateEnabled:true})}).catch(function(){});}
 function showResults(isFree){
   if(!validateEmail()) return;
   freeMode=(isFree===true);
   userName=document.getElementById('input-name').value||'Empresario';
+  const _e=document.getElementById('input-email').value.trim(),_r=computeResults(),_f=_r.overall>=80?'FASE ELITE':_r.overall>=60?'FASE CRECIMIENTO':_r.overall>=40?'FASE ESTABILIZACION':'FASE CRITICA';registerToBrevo(_e,_r.overall,_f,_r.total);
   show('screen-results');
   document.getElementById('progress-bar').style.width='100%';
   buildResults();
