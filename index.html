@@ -677,6 +677,7 @@ function showEmailGate(){
   const priceStr=selectedCurrency.code==='USD'?'$37 USD':selectedCurrency.symbol+priceLocal.toLocaleString('es-CO')+' '+selectedCurrency.code;
   document.getElementById('price-display').textContent=priceStr;
   show('screen-email');
+  trackEvent('email_screen_shown');
   document.getElementById('progress-bar').style.width='92%';
 }
 function validateEmail(){
@@ -711,6 +712,7 @@ function showResults(isFree){
   freeMode=(isFree===true);
   userName=document.getElementById('input-name').value||'Empresario';
   const _e=document.getElementById('input-email').value.trim(),_r=computeResults(),_f=_r.overall>=80?'FASE ELITE':_r.overall>=60?'FASE CRECIMIENTO':_r.overall>=40?'FASE ESTABILIZACION':'FASE CRITICA';registerToBrevo(_e,_r.overall,_f,_r.total);
+  trackEvent('results_viewed',{tipo:isFree?'free':'paid',score:_r.overall,fase:_f});
   show('screen-results');
   document.getElementById('progress-bar').style.width='100%';
   buildResults();
