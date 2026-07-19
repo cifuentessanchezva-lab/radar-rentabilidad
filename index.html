@@ -213,10 +213,12 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
 .phase-mes1::after{background:var(--red);}
 .phase-mes2::after{background:var(--gold);}
 .phase-mes3::after{background:var(--green);}
+.phase-mes4::after{background:var(--accent2);}
 .roadmap-phase-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;text-align:center;}
 .phase-mes1 .roadmap-phase-label{color:var(--red);}
 .phase-mes2 .roadmap-phase-label{color:var(--gold);}
 .phase-mes3 .roadmap-phase-label{color:var(--green);}
+.phase-mes4 .roadmap-phase-label{color:var(--accent2);}
 .roadmap-phase-title{font-size:.95rem;font-weight:700;margin-bottom:16px;text-align:center;line-height:1.3;}
 .roadmap-task{margin-bottom:14px;}
 .roadmap-task-title{display:flex;gap:8px;font-size:.85rem;font-weight:600;color:var(--text);margin-bottom:6px;line-height:1.4;}
@@ -802,6 +804,8 @@ function loadFromURL(){
 
 function buildResults(){
   const{sc,overall,lpa,total}=computeResults();
+  const allWeak=sc.every(s=>s<60);
+  const maxActs=allWeak?4:3;
 
   // FASE
   const phases=[
@@ -833,10 +837,14 @@ function buildResults(){
   const fortalezaP=bestScore>=bestSectorAvg
     ? '<p>Tu fortaleza mas clara esta en <strong>'+sections[bi].label+'</strong>, con un puntaje de '+bestScore+'/100  por encima del promedio del sector ('+bestSectorAvg+'/100). Eso significa que ya tienes una base solida sobre la cual construir.</p>'
     : '<p>Tu area con mejor desempeno es <strong>'+sections[bi].label+'</strong>, con un puntaje de '+bestScore+'/100, aunque aun por debajo del promedio del sector ('+bestSectorAvg+'/100). El plan se enfocara en cerrar las brechas mas grandes, donde el potencial de recuperacion es mas alto.</p>';
+  const finanzasNote=(sc[0]<60&&wi!==0)
+    ? '<p>Nota importante: tu area de <strong>Precios y Finanzas</strong> tambien presenta oportunidad de mejora (score '+sc[0]+'/100). Un precio mal estructurado drena rentabilidad silenciosamente incluso cuando las demas areas funcionan. El plan incluye acciones especificas para cerrar esta brecha.</p>'
+    : '';
   document.getElementById('carta-text').innerHTML=
     '<p>Hola <strong>'+userName+'</strong>, '+biz.intro+' Con una facturacion mensual de <strong>'+revLabel+'</strong> y aproximadamente <strong>'+selectedClients+' clientes activos</strong>, hemos calculado el potencial de recuperacion real basado en los resultados de tu evaluacion.</p>'+
     fortalezaP+
     '<p>Sin embargo, el area que mas te esta costando dinero hoy es <strong>'+sections[wi].label+'</strong>, con un score de '+Math.min(...sc)+'/100. Para tu tipo de negocio, '+bizInsight+' Los benchmarks sectoriales indican que esta brecha representa aproximadamente <strong>'+fmt(lpa[wi])+'</strong> de potencial de recuperacion mensual en tu nivel de facturacion.</p>'+
+    finanzasNote+
     '<p>El plan que encontraras a continuacion esta priorizado por impacto economico. Sigue el orden propuesto para maximizar la recuperacion en el menor tiempo posible.</p>';
 
   document.getElementById('results-intro-text').textContent=phase.label+' - Score global: '+overall+'/100';
@@ -929,24 +937,24 @@ function buildResults(){
     q:i,sec:q.section,
     score:answers[i]!==null?q.options[answers[i]].score:50
   })).sort((a,b)=>a.score-b.score);
-  // Seleccionar top 3, max 1 por area
+  // Seleccionar top maxActs, max 1 por area
   const chosen=[];const usedSecs=new Set();
   for(const qs of qScores){
-    if(chosen.length>=3)break;
+    if(chosen.length>=maxActs)break;
     if(usedSecs.has(qs.sec))continue;
     const act=acts.find(a=>a.q===qs.q);
     if(act){chosen.push({...act,qScore:qs.score});usedSecs.add(qs.sec);}
   }
   // Fallback: si quedan huecos, permite segunda accion por area
-  if(chosen.length<3){
+  if(chosen.length<maxActs){
     for(const qs of qScores){
-      if(chosen.length>=3)break;
+      if(chosen.length>=maxActs)break;
       if(chosen.find(c=>c.q===qs.q))continue;
       const act=acts.find(a=>a.q===qs.q);
       if(act)chosen.push({...act,qScore:qs.score});
     }
   }
-    document.getElementById('action-plan').innerHTML=chosen.slice(0,3).map((a,i)=>'<div class="action-card"><div class="action-num">'+(i+1)+'</div><div class="action-body"><h4>'+a.t+'</h4><p>'+a.d+'</p><div class="action-impact">+'+fmt(Math.round(lpa[a.sec]*a.impPct))+'/mes &middot; '+fmt(Math.round(lpa[a.sec]*a.impPct*3))+' en 6 meses (ahorro en eficiencia)</div>'+(a.tool?'<div class="action-tool"><strong>Herramienta recomendada:</strong> '+a.tool+'</div>':'')+'</div></div>').join('');
+    document.getElementById('action-plan').innerHTML=chosen.slice(0,maxActs).map((a,i)=>'<div class="action-card"><div class="action-num">'+(i+1)+'</div><div class="action-body"><h4>'+a.t+'</h4><p>'+a.d+'</p><div class="action-impact">+'+fmt(Math.round(lpa[a.sec]*a.impPct))+'/mes &middot; '+fmt(Math.round(lpa[a.sec]*a.impPct*3))+' en 6 meses (ahorro en eficiencia)</div>'+(a.tool?'<div class="action-tool"><strong>Herramienta recomendada:</strong> '+a.tool+'</div>':'')+'</div></div>').join('');
     // DESGLOSE DE POTENCIAL POR AREA
     const lpa6m=lpa.map(l=>Math.round(l*3));
     const maxLpa=Math.max(...lpa6m)||1;
@@ -1067,23 +1075,28 @@ function buildResults(){
     const d=seqOrder[a.q]-seqOrder[b.q];
     return d!==0?d:a.qScore-b.qScore;
   });
-  const sR=roadmapOrder.length>=3?roadmapOrder:roadmapOrder.concat(roadmapOrder).slice(0,3);
+  const sR=roadmapOrder.length>=maxActs?roadmapOrder:roadmapOrder.concat(roadmapOrder).slice(0,maxActs);
   const phaseLabels=['FUNDACION','IMPLEMENTACION','OPTIMIZACION Y ESCALA'];
-  const rm=[
-    {cls:'phase-mes1',label:'MES 1 — SEMANAS 1 A 4',title:phaseLabels[0]+': '+sR[0].t,
-     tasks:roadmapByAction[sR[0].q].tasks},
-    {cls:'phase-mes2',label:'MES 2 — SEMANAS 5 A 8',title:phaseLabels[1]+': '+sR[1].t,
-     tasks:roadmapByAction[sR[1].q].tasks},
-    {cls:'phase-mes3',label:'MES 3 — SEMANAS 9 A 12',title:phaseLabels[2]+': '+sR[2].t,
-     tasks:roadmapByAction[sR[2].q].tasks}
-  ];
+  const phaseLabels4=['FUNDACION','IMPLEMENTACION','CONSOLIDACION','OPTIMIZACION Y ESCALA'];
+  const rm=allWeak
+    ?[
+      {cls:'phase-mes1',label:'SEMANAS 1–3',title:phaseLabels4[0]+': '+sR[0].t,tasks:roadmapByAction[sR[0].q].tasks},
+      {cls:'phase-mes2',label:'SEMANAS 4–6',title:phaseLabels4[1]+': '+sR[1].t,tasks:roadmapByAction[sR[1].q].tasks},
+      {cls:'phase-mes3',label:'SEMANAS 7–9',title:phaseLabels4[2]+': '+sR[2].t,tasks:roadmapByAction[sR[2].q].tasks},
+      {cls:'phase-mes4',label:'SEMANAS 10–12',title:phaseLabels4[3]+': '+sR[3].t,tasks:roadmapByAction[sR[3].q].tasks}
+    ]
+    :[
+      {cls:'phase-mes1',label:'MES 1 — SEMANAS 1 A 4',title:phaseLabels[0]+': '+sR[0].t,tasks:roadmapByAction[sR[0].q].tasks},
+      {cls:'phase-mes2',label:'MES 2 — SEMANAS 5 A 8',title:phaseLabels[1]+': '+sR[1].t,tasks:roadmapByAction[sR[1].q].tasks},
+      {cls:'phase-mes3',label:'MES 3 — SEMANAS 9 A 12',title:phaseLabels[2]+': '+sR[2].t,tasks:roadmapByAction[sR[2].q].tasks}
+    ];
   const renderTask=t=>'<div class="roadmap-task"><div class="roadmap-task-title">'+t.t+'</div><div class="roadmap-steps">'+t.s.map(s=>'<div class="roadmap-step">'+s+'</div>').join('')+'</div></div>';
   document.getElementById('roadmap-phases').innerHTML=rm.map(p=>'<div class="roadmap-phase '+p.cls+'"><div class="roadmap-phase-label">'+p.label+'</div><div class="roadmap-phase-title">'+p.title+'</div>'+p.tasks.map(renderTask).join('')+'</div>').join('');
   // QUICK WINS — primera accion concreta de cada mes (solo modo pago)
   if(!freeMode){
     const qwEl=document.getElementById('quick-wins');
     if(qwEl){
-      const qwItems=sR.slice(0,3).map((a,i)=>roadmapByAction[a.q].tasks[0].s[0]);
+      const qwItems=sR.slice(0,maxActs).map((a,i)=>roadmapByAction[a.q].tasks[0].t);
       qwEl.innerHTML='<div class="quick-wins-box"><h4>⚡ ESTA SEMANA — Arranca antes de que termine el dia</h4>'+qwItems.map((w,i)=>'<div class="quick-win-item"><span class="quick-win-bullet">'+(i+1)+'.</span> '+w+'</div>').join('')+'</div>';
     }
   }
