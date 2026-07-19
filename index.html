@@ -744,10 +744,12 @@ function generateShareURL(){
   const base=window.location.href.split('?')[0];
   const params=new URLSearchParams({
     s:sc.join('-'),
+    a:answers.map(x=>x===null?'':x).join('-'),
     r:selectedRevenue,
     c:selectedClients,
     cur:selectedCurrency.code,
     n:userName,
+    bt:selectedBusinessType||'servicios',
     f:freeMode?'1':'0'
   });
   return base+'?'+params.toString();
@@ -777,15 +779,22 @@ function loadFromURL(){
   const cur=p.get('cur')||'USD';
   selectedCurrency=currencies[cur]||currencies.USD;
   userName=p.get('n')||'Empresario';
+  selectedBusinessType=p.get('bt')||'servicios';
   freeMode=p.get('f')!=='0';
-  // Inject fake answers to match stored scores
-  answers=questions.map((q,i)=>{
-    const sec=q.section;
-    const target=sc[sec];
-    let best=0,bestDiff=999;
-    q.options.forEach((o,j)=>{if(Math.abs(o.score-target)<bestDiff){bestDiff=Math.abs(o.score-target);best=j;}});
-    return best;
-  });
+  // Cargar respuestas reales si están en la URL (formato nuevo)
+  const aParam=p.get('a');
+  if(aParam&&aParam.length>0){
+    const aArr=aParam.split('-');
+    answers=questions.map((_,i)=>{const v=parseInt(aArr[i]);return isNaN(v)?null:v;});
+  }else{
+    // Fallback: aproximar respuestas desde scores por area
+    answers=questions.map((q,i)=>{
+      const sec=q.section;const target=sc[sec];
+      let best=0,bestDiff=999;
+      q.options.forEach((o,j)=>{if(Math.abs(o.score-target)<bestDiff){bestDiff=Math.abs(o.score-target);best=j;}});
+      return best;
+    });
+  }
   show('screen-results');
   buildResults();
   return true;
