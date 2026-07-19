@@ -721,7 +721,7 @@ function showResults(isFree){
   document.getElementById('progress-bar').style.width='100%';
   buildResults();
   const shareURL=generateShareURL();
-  sendDiagnosticEmail(shareURL,null,false);
+  sendDiagnosticEmail(shareURL,null,!freeMode);
 }
 function generateShareURL(){
   const{sc,overall}=computeResults();
