@@ -1031,7 +1031,7 @@ function buildResults(){
     document.getElementById('action-plan').innerHTML=chosen.slice(0,maxActs).map((a,i)=>{
       const impMes=Math.round(lpa[a.sec]*a.impPct);
       const imp6m=Math.round(lpa[a.sec]*a.impPct*3);
-      return '<div class="action-card"><div class="action-num">'+(i+1)+'</div><div class="action-body"><h4>'+a.t+'</h4><p>'+a.d+'</p><div class="action-impact">+'+fmt(impMes)+'/mes'+profitTag(impMes)+' &middot; '+fmt(imp6m)+' en 6 meses</div>'+(a.tool?'<div class="action-tool"><strong>Herramienta recomendada:</strong> '+a.tool+'</div>':'')+'</div></div>';
+      return '<div class="action-card"><div class="action-num">'+(i+1)+'</div><div class="action-body"><h4>'+a.t+'</h4><p>'+a.d+'</p><div class="action-impact">+'+fmt(impMes)+'/mes'+profitTag(impMes)+' &middot; '+fmt(imp6m)+' en 6 meses</div>'+(a.tool?'<div class="action-tool"><strong>Herramienta sugerida</strong> <span style="font-weight:400;color:var(--muted)">(pueden existir otras segun tu preferencia):</span> '+a.tool+'</div>':'')+'</div></div>';
     }).join('');
     // DESGLOSE DE POTENCIAL POR AREA
     const lpa6m=lpa.map(l=>Math.round(l*3));
