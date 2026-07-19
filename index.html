@@ -293,6 +293,7 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
       <div class="currency-options">
         <button class="currency-btn" onclick="setCurrency('COP')" id="cur-COP">COP</button>
         <button class="currency-btn active" onclick="setCurrency('USD')" id="cur-USD">USD</button>
+        <button class="currency-btn" onclick="setCurrency('EUR')" id="cur-EUR">EUR</button>
         <button class="currency-btn" onclick="setCurrency('MXN')" id="cur-MXN">MXN</button>
         <button class="currency-btn" onclick="setCurrency('ARS')" id="cur-ARS">ARS</button>
         <button class="currency-btn" onclick="setCurrency('PEN')" id="cur-PEN">PEN</button>
@@ -586,7 +587,7 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
 </div>
 <script>
 // CURRENCIES
-const currencies={USD:{symbol:'$',code:'USD',rate:1},COP:{symbol:'$',code:'COP',rate:4200},MXN:{symbol:'$',code:'MXN',rate:18.5},ARS:{symbol:'$',code:'ARS',rate:1150},PEN:{symbol:'S/',code:'PEN',rate:3.85},CLP:{symbol:'$',code:'CLP',rate:980}};
+const currencies={USD:{symbol:'$',code:'USD',rate:1},EUR:{symbol:'€',code:'EUR',rate:0.92},COP:{symbol:'$',code:'COP',rate:4200},MXN:{symbol:'$',code:'MXN',rate:18.5},ARS:{symbol:'$',code:'ARS',rate:1150},PEN:{symbol:'S/',code:'PEN',rate:3.85},CLP:{symbol:'$',code:'CLP',rate:980}};
 let selectedCurrency=currencies.USD;
 function setCurrency(code){selectedCurrency=currencies[code];document.querySelectorAll('.currency-btn').forEach(b=>b.classList.remove('active'));document.getElementById('cur-'+code).classList.add('active');renderRevenueOptions();}
 function fmt(usd){const v=Math.round(usd*selectedCurrency.rate);return selectedCurrency.symbol+v.toLocaleString('es-CO')+' '+selectedCurrency.code;}
