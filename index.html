@@ -355,7 +355,7 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
       <h2>Tu diagnostico esta listo</h2>
       <p style="color:var(--muted);margin-bottom:8px">Calculado sobre tu facturacion declarada. Potencial de recuperacion mensual:</p>
       <div class="teaser-number" id="teaser-loss">---</div>
-      <div class="teaser-label">potencial de recuperacion mensual</div>
+      <div class="teaser-label">potencial de recuperación en 6 meses</div>
       <p style="margin:20px 0 6px;color:var(--muted);font-size:.9rem">Ingresa tu nombre y email para ver tu puntaje por area de forma gratuita.</p>
       <div class="input-group">
         <input class="input-field" type="text" id="input-name" placeholder="Tu nombre" />
@@ -427,7 +427,7 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
       <div class="loss-card">
         <div class="loss-label">Tu negocio puede recuperar hasta</div>
         <div class="loss-amount" id="loss-display">---</div>
-        <div class="loss-label">al mes optimizando las areas identificadas</div>
+        <div class="loss-label">en 6 meses implementando el plan de acción</div>
         <div class="loss-year" id="loss-year-display"></div>
         <div class="loss-note" id="loss-note"></div>
       </div>
@@ -670,7 +670,7 @@ function computeResults(){
 
 function showEmailGate(){
   const{total}=computeResults();
-  document.getElementById('teaser-loss').textContent=fmt(total);
+  document.getElementById('teaser-loss').textContent=fmt(Math.round(total*3));
   // Update price display to selected currency equivalent
   const priceUSD=37;
   const priceLocal=Math.round(priceUSD*selectedCurrency.rate);
@@ -834,9 +834,9 @@ function buildResults(){
     document.getElementById('loss-year-display').textContent='Desbloquea el informe completo para ver el impacto economico exacto.';
     document.getElementById('loss-note').textContent='';
   }else{
-    document.getElementById('loss-display').textContent=fmt(total);
-    document.getElementById('loss-year-display').textContent=fmt(total*12)+' de oportunidad de recuperacion anual';
-    document.getElementById('loss-note').textContent='Estimado sobre tu facturacion de '+fmt(selectedRevenue)+'/mes. Estimacion conservadora basada en benchmarks sectoriales LATAM y hallazgos de McKinsey, Bain y Deloitte. Los resultados reales dependen de la implementacion y el contexto especifico del negocio.';
+    document.getElementById('loss-display').textContent=fmt(Math.round(total*3));
+    document.getElementById('loss-year-display').textContent=fmt(total)+'/mes de potencial de eficiencia operativa';
+    document.getElementById('loss-note').textContent='Refleja eficiencia operativa y reducción de costos — no incluye el impacto adicional de crecimiento en ventas. Estimado sobre tu facturacion de '+fmt(selectedRevenue)+'/mes. Estimacion conservadora basada en benchmarks sectoriales LATAM y hallazgos de McKinsey, Bain y Deloitte. Los resultados reales dependen de la implementacion y el contexto especifico del negocio.';
   }
 
   // AREAS
@@ -857,14 +857,14 @@ function buildResults(){
 
   // PLAN
   const acts=[
-    {a:0,th:70,t:'Implementa un modelo de precios basado en valor',d:'Las empresas que aplican pricing basado en valor capturan entre 20-40% mas de margen sin perder clientes (McKinsey & Company, Pricing Practice). Calcula el valor economico real que entregas y cobra un porcentaje de ese valor.',imp:'Impacto estimado: +'+fmt(Math.round(lpa[0]*0.6))+'/mes'},
-    {a:0,th:55,t:'Crea un dashboard mensual de rentabilidad por servicio',d:'El 30% de los servicios en empresas sin control de margenes generan perdidas ocultas (Deloitte Business Intelligence). Identifica cuales son y ajusta o elimina.',imp:'Recuperacion estimada: +'+fmt(Math.round(lpa[0]*0.4))+'/mes'},
+    {a:0,th:70,t:'Implementa un modelo de precios basado en valor',d:'Las empresas que aplican pricing basado en valor capturan entre 20-40% mas de margen sin perder clientes (McKinsey & Company, Pricing Practice). Calcula el valor economico real que entregas y cobra un porcentaje de ese valor.',imp:'Impacto estimado: +'+fmt(Math.round(lpa[0]*0.6))+'/mes · '+fmt(Math.round(lpa[0]*0.6*3))+' en 6 meses (ahorro en margen)'},
+    {a:0,th:55,t:'Crea un dashboard mensual de rentabilidad por servicio',d:'El 30% de los servicios en empresas sin control de margenes generan perdidas ocultas (Deloitte Business Intelligence). Identifica cuales son y ajusta o elimina.',imp:'Recuperacion estimada: +'+fmt(Math.round(lpa[0]*0.4))+'/mes · '+fmt(Math.round(lpa[0]*0.4*3))+' en 6 meses (costos ocultos eliminados)'},
     {a:1,th:70,t:'Automatiza tus 3 procesos mas repetitivos',d:'McKinsey Global Institute estima que hasta el 45% de las actividades laborales actuales pueden automatizarse. Empieza con Make.com o Zapier. Cada hora recuperada tiene valor directo en tu facturacion.',imp:'Capacidad liberada: ~'+Math.min(20,Math.round(lpa[1]/50))+'h/semana'},
     {a:1,th:50,t:'Documenta y estandariza tus procesos clave',d:'Empresas con procesos documentados escalan 3x mas rapido y tienen 40% menos errores operativos (Deloitte Operations). Empieza con los 5 procesos que mas se repiten.',imp:'Capacidad de escala sin contratar: +30%'},
-    {a:2,th:70,t:'Lanza un programa de fidelizacion post-venta',d:'Segun Bain & Company, aumentar la retencion de clientes en solo un 5% incrementa las ganancias entre 25% y 95%. Una secuencia de 30 dias post-compra puede transformar compradores unicos en clientes recurrentes.',imp:'Impacto estimado: +'+fmt(Math.round(lpa[2]*0.5))+'/mes'},
-    {a:2,th:50,t:'Activa un sistema de upsell estrategico',d:'El costo de venta a un cliente existente es 5-7x menor que adquirir uno nuevo (Bain & Company). Define 1-2 ofertas de upgrade y presentalas en el momento de mayor satisfaccion del cliente.',imp:'Ingreso adicional estimado: +'+fmt(Math.round(lpa[2]*0.4))+'/mes'},
-    {a:3,th:70,t:'Integra IA en tu flujo de comunicacion y ventas',d:'Las PYMEs que adoptan IA en comunicacion reducen el tiempo de respuesta en 80% y aumentan la tasa de conversion en 15-25% (McKinsey & Company). Empieza con chatbot o respuestas automaticas inteligentes.',imp:'Conversion adicional estimada: +'+Math.min(8,Math.round(Math.max(1,lpa[3]/80)))+' clientes/mes'},
-    {a:3,th:50,t:'Implementa un CRM y metricas basicas de negocio',d:'El 67% de las empresas que implementan un CRM reportan mejora en la tasa de cierre (Deloitte). HubSpot Free o Notion CRM son opciones de costo cero para empezar hoy.',imp:'Mejora en tasa de cierre estimada: +'+fmt(Math.round(lpa[3]*0.3))+'/mes'}
+    {a:2,th:70,t:'Lanza un programa de fidelizacion post-venta',d:'Segun Bain & Company, aumentar la retencion de clientes en solo un 5% incrementa las ganancias entre 25% y 95%. Una secuencia de 30 dias post-compra puede transformar compradores unicos en clientes recurrentes.',imp:'Reducción de costo por pérdida de clientes: +'+fmt(Math.round(lpa[2]*0.5))+'/mes · '+fmt(Math.round(lpa[2]*0.5*3))+' en 6 meses'},
+    {a:2,th:50,t:'Activa un sistema de upsell estrategico',d:'El costo de venta a un cliente existente es 5-7x menor que adquirir uno nuevo (Bain & Company). Define 1-2 ofertas de upgrade y presentalas en el momento de mayor satisfaccion del cliente.',imp:'Ahorro en costo de adquisición: +'+fmt(Math.round(lpa[2]*0.4))+'/mes · '+fmt(Math.round(lpa[2]*0.4*3))+' en 6 meses (vender a existentes es 5-7x más barato)'},
+    {a:3,th:70,t:'Integra IA en tu flujo de comunicacion y ventas',d:'Las PYMEs que adoptan IA en comunicacion reducen el tiempo de respuesta en 80% y aumentan la tasa de conversion en 15-25% (McKinsey & Company). Empieza con chatbot o respuestas automaticas inteligentes.',imp:'Reducción de costo operativo: ~'+fmt(Math.round(lpa[3]*0.4))+'/mes · '+fmt(Math.round(lpa[3]*0.4*3))+' en 6 meses (80% menos tiempo en comunicación manual)'},
+    {a:3,th:50,t:'Implementa un CRM y metricas basicas de negocio',d:'El 67% de las empresas que implementan un CRM reportan mejora en la tasa de cierre (Deloitte). HubSpot Free o Notion CRM son opciones de costo cero para empezar hoy.',imp:'Reducción de costo de seguimiento manual: +'+fmt(Math.round(lpa[3]*0.3))+'/mes · '+fmt(Math.round(lpa[3]*0.3*3))+' en 6 meses'}
   ];
   const sorted=[...sc.entries()].sort((a,b)=>a[1]-b[1]);
   const chosen=[];
