@@ -1139,7 +1139,11 @@ renderRevenueOptions();
   let alreadyPaid=false;
   try{alreadyPaid=localStorage.getItem('radarIsPaid')==='1';}catch(e){}
 
-  if(isPaidURL||alreadyPaid){
+  // PRIORIDAD 1: URL tiene estado completo (link del email) → siempre prevalece sobre localStorage
+  if(urlP.get('s')){
+    loadFromURL();
+  } else if(isPaidURL||alreadyPaid){
+    // PRIORIDAD 2: Retorno de Hotmart (?paid=1) o sesión pagada activa → leer localStorage
     try{localStorage.setItem('radarIsPaid','1');}catch(e){}
     let saved=null;
     try{saved=JSON.parse(localStorage.getItem('diagStatePaid')||localStorage.getItem('diagState'));}catch(e){}
@@ -1169,7 +1173,7 @@ renderRevenueOptions();
     }
   } else if(urlP.get('buy')==='1'){
     if(!loadFromURL()) document.getElementById('screen-intro').classList.add('active');
-  } else if(!loadFromURL()){
+  } else {
     document.getElementById('screen-intro').classList.add('active');
   }
 })();
