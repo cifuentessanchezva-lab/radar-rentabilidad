@@ -334,6 +334,17 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
           <div class="ctx-option" onclick="selectBizType('restaurante',this)"><div class="ctx-option-label">Restaurante / Food</div><div class="ctx-option-sub">Cafeteria, restaurante, catering, pasteleria</div><div class="ctx-check"></div></div>
           <div class="ctx-option" onclick="selectBizType('agencia',this)"><div class="ctx-option-label">Agencia / Consultoria</div><div class="ctx-option-sub">Marketing, diseno, desarrollo, gestion</div><div class="ctx-check"></div></div>
           <div class="ctx-option" onclick="selectBizType('digital',this)"><div class="ctx-option-label">Digital / E-commerce</div><div class="ctx-option-sub">Infoproductos, SaaS, tienda online</div><div class="ctx-check"></div></div>
+          <div class="ctx-option" onclick="selectBizType('produccion',this)"><div class="ctx-option-label">Produccion / Manufactura</div><div class="ctx-option-sub">Fabrica, taller, empresa de manufactura</div><div class="ctx-check"></div></div>
+        </div>
+      </div>
+
+      <div class="ctx-block">
+        <div class="ctx-label">&#x1F4B0; ¿Cuál es tu margen neto aproximado antes de impuestos? <span style="font-size:.8em;color:#94a3b8">(opcional)</span></div>
+        <div class="ctx-options" id="margin-options">
+          <div class="ctx-option" onclick="selectMargin('lt10',this)"><div class="ctx-option-label">Menos del 10%</div><div class="ctx-option-sub">Cada peso vendido deja menos de 10 centavos</div><div class="ctx-check"></div></div>
+          <div class="ctx-option" onclick="selectMargin('r10_20',this)"><div class="ctx-option-label">Entre 10% y 20%</div><div class="ctx-option-sub">Margen ajustado, tipico en comercio y servicios</div><div class="ctx-check"></div></div>
+          <div class="ctx-option" onclick="selectMargin('r20_35',this)"><div class="ctx-option-label">Entre 20% y 35%</div><div class="ctx-option-sub">Margen saludable, buen control de costos</div><div class="ctx-check"></div></div>
+          <div class="ctx-option" onclick="selectMargin('gt35',this)"><div class="ctx-option-label">Mas del 35%</div><div class="ctx-option-sub">Alto margen, modelo de alta escala o especializado</div><div class="ctx-check"></div></div>
         </div>
       </div>
 
@@ -584,7 +595,8 @@ const revenueRanges=[
   {label:'Entre',   val:30000, usdMin:15000,usdMax:50000},
   {label:'Mas de',  val:75000, usdMin:50000}
 ];
-let selectedRevenue=null, selectedClients=null, selectedBusinessType=null;
+let selectedRevenue=null, selectedClients=null, selectedBusinessType=null, selectedMargin=null;
+const marginRates={lt10:0.07, r10_20:0.15, r20_35:0.275, gt35:0.40};
 
 function renderRevenueOptions(){
   const c=selectedCurrency;
@@ -619,13 +631,19 @@ function selectBizType(type,el){
   el.classList.add('selected');
   checkCtxReady();
 }
+function selectMargin(key,el){
+  selectedMargin=key;
+  document.querySelectorAll('#margin-options .ctx-option').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+  // No bloquea el flujo — es opcional
+}
 
 // SECTIONS & QUESTIONS
 const sections=[
-  {id:'finanzas',    label:'Finanzas y Precios',    icon:'=�',color:'#3b82f6',market:62, lossPct:0.08},
-  {id:'operaciones', label:'Operaciones y Tiempo',   icon:'�',color:'#6366f1',market:55, lossPct:0.12},
-  {id:'clientes',    label:'Clientes y Retencion',   icon:'>',color:'#10b981',market:58, lossPct:0.10},
-  {id:'automatizacion',label:'Automatizacion e IA', icon:'>',color:'#f59e0b',market:40, lossPct:0.07}
+  {id:'finanzas',    label:'Finanzas y Precios',    icon:'=�',color:'#3b82f6',market:62},
+  {id:'operaciones', label:'Operaciones y Tiempo',   icon:'�',color:'#6366f1',market:55},
+  {id:'clientes',    label:'Clientes y Retencion',   icon:'>',color:'#10b981',market:58},
+  {id:'automatizacion',label:'Automatizacion e IA', icon:'>',color:'#f59e0b',market:40}
 ];
 
 const questions=[
@@ -680,8 +698,27 @@ function computeResults(){
     return Math.round(sum/idx.length);
   });
   const overall=Math.round(sc.reduce((a,b)=>a+b,0)/4);
-  // Loss = revenue * benchmark_loss_pct * (1 - score/100)
-  const lpa=sc.map((s,i)=>Math.round(selectedRevenue * sections[i].lossPct * (1-s/100)));
+  // Tabla de impacto potencial por area e industria (% sobre ingresos mensuales)
+  // Fuentes: McKinsey Pricing Excellence 2022, Deloitte LATAM SMB Ops 2023,
+  // Bain & Co Customer Loyalty, NRF Retail Study, NRA Restaurant Report,
+  // Agency Management Institute, Baymard Institute E-commerce 2023
+  // Orden: [finanzas, operaciones, clientes, automatizacion]
+  const lossByIndustry={
+    servicios:  [0.08,0.12,0.10,0.07], // McKinsey: 8-10% underpricing; Deloitte: 12-15% ineficiencia; Bain: churn 18-22%/año
+    comercio:   [0.06,0.15,0.08,0.09], // NRF: shrinkage+waste 10-15%; menor palanca pricing por transparencia; Euromonitor digital gap 9-12%
+    restaurante:[0.10,0.18,0.12,0.05], // NRA: menu engineering 8-12%; food waste+labor 15-20%; fidelizacion alta; menor palanca digital
+    agencia:    [0.07,0.09,0.11,0.08], // AMI: scope creep 7-12%; PMI: overruns 9-12%; perder cliente = 11-15% revenue; Gartner herramientas 8-10%
+    digital:    [0.09,0.08,0.13,0.06], // Dynamic pricing lift 9-14%; fulfillment eficiente; Baymard: cart recovery 5-12%; menor gap digital
+    produccion: [0.09,0.20,0.07,0.10]  // KPMG Mfg: cost-plus gap 8-11%; McKinsey Mfg 2023: waste+downtime 18-25%; B2B churn bajo pero alto impacto; IDB LATAM Industry 4.0: gap digital 10-15%
+  };
+  const bt=selectedBusinessType||'servicios';
+  const lp=lossByIndustry[bt]||lossByIndustry.servicios;
+  // Formula: perdida proporcional al gap real vs benchmark del sector
+  // Si tu score >= benchmark, la perdida es 0 (ya estas al nivel del mercado o mejor)
+  const lpa=sc.map((s,i)=>{
+    const gap=Math.max(0,(sections[i].market-s)/sections[i].market);
+    return Math.round(selectedRevenue*lp[i]*gap);
+  });
   const total=lpa.reduce((a,b)=>a+b,0);
   return{sc,overall,lpa,total};
 }
@@ -720,7 +757,7 @@ function saveLeadAndPay(){
   if(!validateEmail()) return;
   const name=document.getElementById('input-name').value||'Empresario';
   const email=document.getElementById('input-email').value.trim();
-  const state={a:answers,r:selectedRevenue,c:selectedClients,cur:selectedCurrency.code,n:name,email:email,bt:selectedBusinessType};
+  const state={a:answers,r:selectedRevenue,c:selectedClients,cur:selectedCurrency.code,n:name,email:email,bt:selectedBusinessType,mg:selectedMargin};
   try{
     localStorage.setItem('diagState',JSON.stringify(state));
     localStorage.setItem('diagStatePaid',JSON.stringify(state));
@@ -752,6 +789,7 @@ function generateShareURL(){
     cur:selectedCurrency.code,
     n:userName,
     bt:selectedBusinessType||'servicios',
+    mg:selectedMargin||'',
     f:freeMode?'1':'0'
   });
   return base+'?'+params.toString();
@@ -782,6 +820,7 @@ function loadFromURL(){
   selectedCurrency=currencies[cur]||currencies.USD;
   userName=p.get('n')||'Empresario';
   selectedBusinessType=p.get('bt')||'servicios';
+  selectedMargin=p.get('mg')||null;
   freeMode=p.get('f')!=='0';
   // Cargar respuestas reales si están en la URL (formato nuevo)
   const aParam=p.get('a');
@@ -806,6 +845,15 @@ function buildResults(){
   const{sc,overall,lpa,total}=computeResults();
   const allWeak=sc.every(s=>s<60);
   const maxActs=allWeak?4:3;
+  // Margen neto — calcula utilidad mensual si fue capturado
+  const marginRate=selectedMargin?marginRates[selectedMargin]:null;
+  const utilidad=marginRate?Math.round(selectedRevenue*marginRate):null;
+  const totalAsUtilPct=utilidad&&utilidad>0?Math.round(total/utilidad*100):null;
+  function profitTag(amount){
+    if(!utilidad||utilidad<=0)return'';
+    const pct=Math.round(amount/utilidad*100);
+    return' <span style="background:#fef3c7;color:#92400e;border-radius:6px;padding:2px 8px;font-size:.8em;font-weight:700">= '+pct+'% de tu utilidad</span>';
+  }
 
   // FASE
   const phases=[
@@ -827,7 +875,8 @@ function buildResults(){
     comercio:{intro:'Para un negocio de comercio o retail como el tuyo,',priceCtx:'el control de margenes por producto y la gestion del inventario determinan si el negocio es rentable o solo activo.',retCtx:'el ticket promedio y la frecuencia de compra son los motores de crecimiento mas subestimados.',opCtx:'los procesos de compra, recepcion y despacho concentran la mayor parte de las perdidas ocultas.',autoCtx:'la digitalizacion del punto de venta y el seguimiento de stock son pasos criticos para escalar.'},
     restaurante:{intro:'Para un negocio de restaurante o food service como el tuyo,',priceCtx:'el costo de materia prima y el control de merma son los factores que mas impactan tu margen real.',retCtx:'la experiencia del cliente y la frecuencia de regreso determinan tu capacidad de facturar de forma sostenida.',opCtx:'los procesos de cocina, servicio y cierre de caja son donde mas se pierden tiempo y dinero.',autoCtx:'la digitalizacion del pedido y el control de inventario en tiempo real pueden transformar la rentabilidad del negocio.'},
     agencia:{intro:'Para una agencia o consultoria como la tuya,',priceCtx:'el precio por proyecto vs precio por valor entregado es la diferencia entre crecer y quedar atrapado en el intercambio horas-dinero.',retCtx:'la retencion de cuentas y la expansion de servicios dentro del mismo cliente es tu palanca mas eficiente.',opCtx:'la entrega de proyectos y el onboarding de clientes concentran la mayoria de las ineficiencias.',autoCtx:'la estandarizacion de procesos y uso de IA puede duplicar tu capacidad sin contratar.'},
-    digital:{intro:'Para un negocio digital o e-commerce como el tuyo,',priceCtx:'la arquitectura de precios, los bundles y los modelos de suscripcion definen el techo de tu rentabilidad.',retCtx:'el LTV y la tasa de churn son las metricas que mas impactan tu rentabilidad a largo plazo.',opCtx:'los flujos de fulfillment, soporte y entrega digital son donde se acumulan los cuellos de botella mas costosos.',autoCtx:'la automatizacion de marketing, onboarding y soporte es fundamental para escalar sin multiplicar costos fijos.'}
+    digital:{intro:'Para un negocio digital o e-commerce como el tuyo,',priceCtx:'la arquitectura de precios, los bundles y los modelos de suscripcion definen el techo de tu rentabilidad.',retCtx:'el LTV y la tasa de churn son las metricas que mas impactan tu rentabilidad a largo plazo.',opCtx:'los flujos de fulfillment, soporte y entrega digital son donde se acumulan los cuellos de botella mas costosos.',autoCtx:'la automatizacion de marketing, onboarding y soporte es fundamental para escalar sin multiplicar costos fijos.'},
+    produccion:{intro:'Para una empresa de produccion o manufactura como la tuya,',priceCtx:'el modelo de precio basado en valor entregado — no solo en costo de produccion — es la palanca mas subestimada de rentabilidad.',retCtx:'los contratos de largo plazo y la satisfaccion del cliente B2B son criticos: perder un cliente en manufactura puede significar perder el 15-25% de la facturacion.',opCtx:'la merma, los tiempos muertos de maquinaria y los reprocesos son donde se concentran las mayores perdidas ocultas del negocio.',autoCtx:'la trazabilidad, el control de calidad automatizado y los sistemas MES son las inversiones con mayor retorno en manufactura LATAM.'}
   };
   const biz=bizCtx[selectedBusinessType]||bizCtx.servicios;
   const weakLabel=sections[wi].id;
@@ -840,11 +889,15 @@ function buildResults(){
   const finanzasNote=(sc[0]<60&&wi!==0)
     ? '<p>Nota importante: tu area de <strong>Precios y Finanzas</strong> tambien presenta oportunidad de mejora (score '+sc[0]+'/100). Un precio mal estructurado drena rentabilidad silenciosamente incluso cuando las demas areas funcionan. El plan incluye acciones especificas para cerrar esta brecha.</p>'
     : '';
+  const marginCtx=utilidad
+    ? '<p style="background:linear-gradient(135deg,#1e3a5f,#1e293b);border-left:4px solid #f59e0b;border-radius:8px;padding:14px 18px;margin:16px 0"><span style="color:#f59e0b;font-weight:700">Tu utilidad mensual estimada: '+fmt(utilidad)+'</span><br><span style="color:#cbd5e1;font-size:.95em">El potencial de recuperacion total de <strong style="color:#fff">'+fmt(total)+'</strong> representa el <strong style="color:#fbbf24">'+totalAsUtilPct+'% de tu utilidad mensual actual</strong>. Eso significa que los problemas identificados estan consumiendo una parte significativa de lo que realmente te queda despues de costos.</span></p>'
+    : '';
   document.getElementById('carta-text').innerHTML=
     '<p>Hola <strong>'+userName+'</strong>, '+biz.intro+' Con una facturacion mensual de <strong>'+revLabel+'</strong> y aproximadamente <strong>'+selectedClients+' clientes activos</strong>, hemos calculado el potencial de recuperacion real basado en los resultados de tu evaluacion.</p>'+
     fortalezaP+
     '<p>Sin embargo, el area que mas te esta costando dinero hoy es <strong>'+sections[wi].label+'</strong>, con un score de '+Math.min(...sc)+'/100. Para tu tipo de negocio, '+bizInsight+' Los benchmarks sectoriales indican que esta brecha representa aproximadamente <strong>'+fmt(lpa[wi])+'</strong> de potencial de recuperacion mensual en tu nivel de facturacion.</p>'+
     finanzasNote+
+    marginCtx+
     '<p>El plan que encontraras a continuacion esta priorizado por impacto economico. Sigue el orden propuesto para maximizar la recuperacion en el menor tiempo posible.</p>';
 
   document.getElementById('results-intro-text').textContent=phase.label+' - Score global: '+overall+'/100';
@@ -954,7 +1007,11 @@ function buildResults(){
       if(act)chosen.push({...act,qScore:qs.score});
     }
   }
-    document.getElementById('action-plan').innerHTML=chosen.slice(0,maxActs).map((a,i)=>'<div class="action-card"><div class="action-num">'+(i+1)+'</div><div class="action-body"><h4>'+a.t+'</h4><p>'+a.d+'</p><div class="action-impact">+'+fmt(Math.round(lpa[a.sec]*a.impPct))+'/mes &middot; '+fmt(Math.round(lpa[a.sec]*a.impPct*3))+' en 6 meses (ahorro en eficiencia)</div>'+(a.tool?'<div class="action-tool"><strong>Herramienta recomendada:</strong> '+a.tool+'</div>':'')+'</div></div>').join('');
+    document.getElementById('action-plan').innerHTML=chosen.slice(0,maxActs).map((a,i)=>{
+      const impMes=Math.round(lpa[a.sec]*a.impPct);
+      const imp6m=Math.round(lpa[a.sec]*a.impPct*3);
+      return '<div class="action-card"><div class="action-num">'+(i+1)+'</div><div class="action-body"><h4>'+a.t+'</h4><p>'+a.d+'</p><div class="action-impact">+'+fmt(impMes)+'/mes'+profitTag(impMes)+' &middot; '+fmt(imp6m)+' en 6 meses</div>'+(a.tool?'<div class="action-tool"><strong>Herramienta recomendada:</strong> '+a.tool+'</div>':'')+'</div></div>';
+    }).join('');
     // DESGLOSE DE POTENCIAL POR AREA
     const lpa6m=lpa.map(l=>Math.round(l*3));
     const maxLpa=Math.max(...lpa6m)||1;
@@ -970,7 +1027,8 @@ function buildResults(){
       comercio:{label:'Comercio / Retail',scores:[65,60,52,45],insight:'El comercio en LATAM ha avanzado en control de costos y operaciones, pero la retencion de clientes y el marketing de fidelizacion siguen siendo los puntos debiles mas frecuentes. La digitalizacion del punto de venta marca la diferencia competitiva.'},
       restaurante:{label:'Restaurante / Food',scores:[55,63,60,35],insight:'Los restaurantes tienen procesos operativos mas estructurados que otros sectores, pero el control de costo de materia prima y la automatizacion siguen siendo criticos. La experiencia del cliente es el activo mas valioso del negocio.'},
       agencia:{label:'Agencia / Consultoria',scores:[60,50,68,48],insight:'Las agencias lideran en retencion de clientes pero tienen los procesos internos mas variables. La estandarizacion de entrega y el modelo de precios basado en resultados son las palancas con mayor impacto directo en rentabilidad.'},
-      digital:{label:'Digital / E-commerce',scores:[63,58,55,62],insight:'Los negocios digitales son los mas avanzados en automatizacion, pero frecuentemente descuidan la retencion (churn) y el lifetime value del cliente. Optimizar la secuencia post-compra puede duplicar la rentabilidad sin aumentar la inversion en adquisicion.'}
+      digital:{label:'Digital / E-commerce',scores:[63,58,55,62],insight:'Los negocios digitales son los mas avanzados en automatizacion, pero frecuentemente descuidan la retencion (churn) y el lifetime value del cliente. Optimizar la secuencia post-compra puede duplicar la rentabilidad sin aumentar la inversion en adquisicion.'},
+      produccion:{label:'Produccion / Manufactura',scores:[52,45,55,30],insight:'Las empresas de manufactura en LATAM tienen procesos de relacionamiento con clientes relativamente estables, pero enfrentan brechas importantes en eficiencia operativa y digitalizacion. La adopcion de herramientas Industry 4.0 y el control de merma son las palancas con mayor impacto inmediato en rentabilidad. (Fuentes: IDB LATAM Manufacturing Report 2023, McKinsey Global Manufacturing 2023)'}
     };
     const bt=selectedBusinessType||'servicios';
     const ib=indBench[bt]||indBench.servicios;
@@ -1155,8 +1213,9 @@ renderRevenueOptions();
   // PRIORIDAD 1: URL tiene estado completo (link del email) → siempre prevalece sobre localStorage
   if(urlP.get('s')){
     loadFromURL();
-  } else if(isPaidURL||alreadyPaid){
-    // PRIORIDAD 2: Retorno de Hotmart (?paid=1) o sesión pagada activa → leer localStorage
+  } else if(isPaidURL){
+    // PRIORIDAD 2: Retorno EXPLÍCITO de Hotmart (?paid=1) → leer localStorage
+    // NOTA: alreadyPaid (solo localStorage) NO activa esta rama — visita sin params siempre va a intro
     try{localStorage.setItem('radarIsPaid','1');}catch(e){}
     let saved=null;
     try{saved=JSON.parse(localStorage.getItem('diagStatePaid')||localStorage.getItem('diagState'));}catch(e){}
@@ -1164,6 +1223,7 @@ renderRevenueOptions();
       selectedRevenue=saved.r||3000;
       selectedClients=saved.c||13;
       selectedBusinessType=saved.bt||'servicios';
+      selectedMargin=saved.mg||null;
       selectedCurrency=currencies[saved.cur]||currencies.USD;
       userName=saved.n||'Empresario';
       const savedEmail=saved.email||'';
