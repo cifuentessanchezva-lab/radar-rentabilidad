@@ -180,6 +180,68 @@
       <div class="pain-c"><strong>Clientes</strong><p>Alta rotación, bajo valor de vida, propuesta que no retiene.</p></div>
       <div class="pain-c"><strong>Automatización</strong><p>Tareas repetitivas que consumen horas de tu equipo cada semana.</p></div>
     </div>
+    <!-- Radar chart preview -->
+    <div style="margin-top:48px;text-align:center">
+      <p style="font-size:12px;text-transform:uppercase;letter-spacing:2px;color:#94A3B8;margin-bottom:20px">Así se ve tu diagnóstico</p>
+      <div style="background:#fff;border:0.5px solid #E2E8F0;border-radius:12px;padding:32px 24px;max-width:500px;margin:0 auto;box-shadow:0 4px 20px rgba(0,0,0,.06)">
+        <p style="font-size:14px;font-weight:500;color:#1A2E5A;margin-bottom:16px">Análisis por área de negocio</p>
+        <div style="display:flex;gap:20px;justify-content:center;margin-bottom:20px;font-size:12px;color:#475569">
+          <span style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:3px;background:#2A7DD4;border-radius:2px"></span>Tu negocio</span>
+          <span style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:3px;background:none;border-top:2px dashed #F5A623"></span>Promedio mercado</span>
+        </div>
+        <svg viewBox="0 0 400 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:380px">
+          <!-- Grid diamonds -->
+          <g stroke="#E2E8F0" stroke-width="1" fill="none">
+            <polygon points="200,65 335,200 200,335 65,200"/>
+            <polygon points="200,98 302,200 200,302 98,200"/>
+            <polygon points="200,132 268,200 200,268 132,200"/>
+            <polygon points="200,166 234,200 200,234 166,200"/>
+          </g>
+          <!-- Axis lines -->
+          <g stroke="#E2E8F0" stroke-width="1">
+            <line x1="200" y1="65" x2="200" y2="335"/>
+            <line x1="65" y1="200" x2="335" y2="200"/>
+          </g>
+          <!-- Grid labels -->
+          <g font-size="10" fill="#94A3B8" text-anchor="middle">
+            <text x="207" y="163">25</text>
+            <text x="207" y="129">50</text>
+            <text x="207" y="95">75</text>
+            <text x="207" y="62">100</text>
+          </g>
+          <!-- Axis labels -->
+          <g font-size="13" fill="#475569" text-anchor="middle" font-family="Inter,sans-serif">
+            <text x="200" y="50">Finanzas</text>
+            <text x="360" y="205">Operaciones</text>
+            <text x="200" y="355">Clientes</text>
+            <text x="40" y="205">Automatización</text>
+          </g>
+          <!-- Benchmark polygon (promedio mercado ~55-65%) -->
+          <!-- Finanzas(top)=65%: y=200-0.65*135=112  Operaciones(right)=55%: x=200+0.55*135=274  Clientes(bottom)=60%: y=200+0.60*135=281  Auto(left)=52%: x=200-0.52*135=130 -->
+          <polygon points="200,112 274,200 200,281 130,200" 
+            fill="rgba(245,166,35,0.08)" stroke="#F5A623" stroke-width="2" stroke-dasharray="6,4" fill-opacity="0.3"/>
+          <!-- Tu negocio polygon (~38-48%) -->
+          <!-- Finanzas=42%: y=200-0.42*135=143  Operaciones=38%: x=200+0.38*135=251  Clientes=48%: y=200+0.48*135=265  Auto=35%: x=200-0.35*135=153 -->
+          <polygon points="200,143 251,200 200,265 153,200" 
+            fill="rgba(42,125,212,0.15)" stroke="#2A7DD4" stroke-width="2.5" fill-opacity="0.4"/>
+          <!-- Data points Tu negocio -->
+          <g fill="#2A7DD4">
+            <circle cx="200" cy="143" r="4"/>
+            <circle cx="251" cy="200" r="4"/>
+            <circle cx="200" cy="265" r="4"/>
+            <circle cx="153" cy="200" r="4"/>
+          </g>
+          <!-- Data points Benchmark -->
+          <g fill="#F5A623">
+            <circle cx="200" cy="112" r="4"/>
+            <circle cx="274" cy="200" r="4"/>
+            <circle cx="200" cy="281" r="4"/>
+            <circle cx="130" cy="200" r="4"/>
+          </g>
+        </svg>
+      </div>
+      <p style="font-size:13px;color:#94A3B8;margin-top:16px;font-style:italic">Ejemplo de diagnóstico real — cada negocio recibe el suyo</p>
+    </div>
   </div>
 </section>
 
