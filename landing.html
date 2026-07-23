@@ -97,6 +97,18 @@
     .btn-buy{display:block;background:var(--blue);color:#fff;border-radius:8px;padding:16px;font-size:16px;font-weight:500;margin-top:28px;text-align:center}
     .p-safe{font-size:11px;color:var(--g400);margin-top:14px}
 
+    /* CASE STUDY */
+    .case{background:var(--white)}
+    .case-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin:0 auto 32px;max-width:720px}
+    .case-item{background:var(--cloud);border-radius:10px;padding:20px 16px;text-align:center}
+    .case-score{font-size:36px;font-weight:500;line-height:1;margin-bottom:6px}
+    .case-score.low{color:#E05252}
+    .case-score.mid{color:var(--gold)}
+    .case-area{font-size:13px;font-weight:500;color:var(--navy);margin-bottom:4px}
+    .case-detail{font-size:12px;color:var(--g600);line-height:1.5}
+    .case-quote{font-size:16px;font-style:italic;color:var(--navy);max-width:480px;margin:0 auto 28px;line-height:1.6;border-left:3px solid var(--gold);padding-left:20px;text-align:left}
+    .case-quote span{font-size:12px;color:var(--g400);font-style:normal;display:block;margin-top:8px}
+
     /* UPSELL */
     .upsell{background:var(--cloud);padding:48px 24px;text-align:center;border-top:0.5px solid var(--g100)}
     .upsell p{font-size:14px;color:var(--g600);max-width:480px;margin:12px auto 16px;line-height:1.7}
@@ -128,17 +140,16 @@
   <p>Radar de Rentabilidad identifica en 5 minutos las áreas que drenan tu negocio — y te dice exactamente cuánto puedes recuperar.</p>
   <div class="hero-ctas">
     <a href="https://cifuentessanchezva-lab.github.io/radar-rentabilidad/" class="btn-p" onclick="gtag('event','landing_cta_click',{button:'hero_gratis'})">Hacer mi diagnóstico gratis →</a>
-    <a href="https://cifuentessanchezva-lab.github.io/radar-rentabilidad/?buy=1" class="btn-o" onclick="gtag('event','landing_cta_click',{button:'hero_paid'})">Ver reporte completo — $37</a>
   </div>
-  <p class="hero-note">El diagnóstico inicial es gratuito · El reporte completo se desbloquea por $37 USD</p>
+  <p class="hero-note">Sin registro · Sin tarjeta · Resultado en menos de 10 minutos</p>
 </section>
 
 <div class="stats">
   <div class="stats-in">
-    <div><div class="stat-n">5 min</div><div class="stat-l">Para completar</div></div>
+    <div><div class="stat-n">10 min</div><div class="stat-l">Para completar</div></div>
     <div><div class="stat-n">4 áreas</div><div class="stat-l">Evaluadas</div></div>
-    <div><div class="stat-n">$37 USD</div><div class="stat-l">Reporte completo</div></div>
-    <div><div class="stat-n">100%</div><div class="stat-l">Digital e inmediato</div></div>
+    <div><div class="stat-n">100%</div><div class="stat-l">Gratuito</div></div>
+    <div><div class="stat-n">Inmediato</div><div class="stat-l">Sin registro</div></div>
   </div>
 </div>
 
@@ -227,6 +238,22 @@
       <span class="atag">Centros educativos</span>
       <span class="atag">Servicios B2B en general</span>
     </div>
+  </div>
+</section>
+
+<section class="case">
+  <div class="sec" style="text-align:center">
+    <div class="tag">Caso real</div>
+    <h2 class="ttl">Una fábrica de agua descubrió que le costaba más producir de lo que vendía</h2>
+    <p class="sub" style="margin:0 auto 36px">Llevan años operando. Facturan entre $21M y $63M COP al mes. El negocio funcionaba — hasta que aplicamos el Radar:</p>
+    <div class="case-grid">
+      <div class="case-item"><div class="case-score low">32</div><div class="case-area">Precios / Finanzas</div><div class="case-detail">Vendiendo por debajo del costo real</div></div>
+      <div class="case-item"><div class="case-score low">23</div><div class="case-area">Operaciones</div><div class="case-detail">Procesos manuales sin control de tiempos</div></div>
+      <div class="case-item"><div class="case-score mid">43</div><div class="case-area">Retención</div><div class="case-detail">Clientes satisfechos pero sin contratos</div></div>
+      <div class="case-item"><div class="case-score low">22</div><div class="case-area">Automatización</div><div class="case-detail">Cero visibilidad sobre márgenes reales</div></div>
+    </div>
+    <blockquote class="case-quote">"Por primera vez tengo la brújula de un experto."<br><span>— Propietario, fábrica de agua, Colombia</span></blockquote>
+    <a href="https://cifuentessanchezva-lab.github.io/radar-rentabilidad/" class="btn-p" style="display:inline-block;margin-top:8px" onclick="gtag('event','landing_cta_click',{button:'case_gratis'})">Hacer mi diagnóstico gratis →</a>
   </div>
 </section>
 
