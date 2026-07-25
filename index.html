@@ -395,16 +395,17 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
 <div id="screen-email" class="screen">
   <div class="container" style="max-width:520px">
     <div class="email-card">
-      <div style="font-size:2.5rem;margin-bottom:12px">&#127775;</div>
-      <h2 style="margin-bottom:6px">Tu diagnostico esta listo</h2>
-      <p style="color:var(--muted);margin-bottom:8px;font-size:.9rem">Identificamos un potencial de recuperacion mensual de:</p>
+      <div style="font-size:2.5rem;margin-bottom:12px">🚨</div>
+      <h2 style="margin-bottom:6px">Tu negocio tiene fugas activas</h2>
+      <p style="color:var(--muted);margin-bottom:8px;font-size:.9rem">Calculamos lo que estás perdiendo cada mes sin saberlo:</p>
       <div class="teaser-number" id="teaser-loss">---</div>
-      <div class="teaser-label" style="margin-bottom:24px">en los proximos 6 meses</div>
+      <div class="teaser-label" style="margin-bottom:6px">en los próximos 6 meses</div>
+      <p style="font-size:.8rem;color:#ef4444;margin-bottom:24px;font-weight:600">⚠️ Cada mes que pasa sin actuar, ese dinero se va.</p>
 
       <!-- CAMINO PRINCIPAL: GRATIS -->
       <div style="background:rgba(16,185,129,.07);border:1.5px solid rgba(16,185,129,.3);border-radius:16px;padding:20px;margin-bottom:16px">
-        <div style="font-size:.72rem;font-weight:700;color:#10b981;letter-spacing:.08em;margin-bottom:8px">DIAGNOSTICO GRATUITO</div>
-        <p style="font-size:.88rem;color:var(--muted);margin-bottom:14px;line-height:1.5">Ingresa tus datos para ver tu puntaje por area y las oportunidades de mejora detectadas</p>
+        <div style="font-size:.72rem;font-weight:700;color:#10b981;letter-spacing:.08em;margin-bottom:8px">DIAGNÓSTICO GRATUITO</div>
+        <p style="font-size:.88rem;color:var(--muted);margin-bottom:14px;line-height:1.5">Ingresa tu email y ve <strong style="color:var(--text)">exactamente en qué área se está yendo el dinero</strong> y por qué — con tu puntaje real vs. el mercado.</p>
         <div class="input-group" style="margin-bottom:12px">
           <input class="input-field" type="text" id="input-name" placeholder="Tu nombre" />
           <input class="input-field" type="email" id="input-email" placeholder="Tu email *" />
@@ -417,7 +418,7 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
       <!-- SEPARADOR -->
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
         <div style="flex:1;height:1px;background:var(--border)"></div>
-        <span style="font-size:.78rem;color:var(--muted)">o si quieres el plan completo</span>
+        <span style="font-size:.78rem;color:var(--muted)">o cierra las fugas ahora</span>
         <div style="flex:1;height:1px;background:var(--border)"></div>
       </div>
 
@@ -438,7 +439,7 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
           <div>&#10003; Benchmarks por sector</div>
         </div>
         <a id="hotmart-link" onclick="trackEvent('report_purchase_click')" href="https://pay.hotmart.com/J106755421R" target="_blank" style="text-decoration:none;display:block">
-          <button class="btn-primary" style="width:100%;justify-content:center;" onclick="saveLeadAndPay()">Acceder al informe completo &#8594; <span id="price-btn">$37 USD</span></button>
+          <button class="btn-primary" style="width:100%;justify-content:center;" onclick="saveLeadAndPay()">Quiero detener las fugas ahora &#8594; <span id="price-btn">$37 USD</span></button>
         </a>
         <div style="font-size:.7rem;color:var(--muted);text-align:center;margin-top:8px">&#128274; Pago seguro via Hotmart &middot; <strong style="color:var(--text)">Garantia 7 dias</strong></div>
       </div>
