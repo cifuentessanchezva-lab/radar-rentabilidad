@@ -699,6 +699,8 @@ function startQuestions(){
   if(!selectedRevenue||!selectedClients) return;
   currentQ=0; answers=new Array(questions.length).fill(null);
   show('screen-question'); renderQuestion();
+  trackEvent('quiz_context_complete');
+  trackEvent('quiz_step',{question:1,total:questions.length,section:sections[questions[0].section].label});
 }
 
 function renderQuestion(){
@@ -716,7 +718,7 @@ function renderQuestion(){
   document.getElementById('btn-next').disabled=answers[currentQ]===null;
 }
 function selectOption(i){answers[currentQ]=i;renderQuestion();}
-function nextQuestion(){if(answers[currentQ]===null)return;if(currentQ<questions.length-1){currentQ++;renderQuestion();}else showEmailGate();}
+function nextQuestion(){if(answers[currentQ]===null)return;if(currentQ<questions.length-1){currentQ++;renderQuestion();trackEvent('quiz_step',{question:currentQ+1,total:questions.length,section:sections[questions[currentQ].section].label});}else showEmailGate();}
 function prevQuestion(){if(currentQ>0){currentQ--;renderQuestion();}}
 
 // COMPUTE  anchored to declared revenue + real benchmarks
@@ -767,6 +769,7 @@ function showEmailGate(){
       return '<div style="display:flex;align-items:center;gap:10px"><span style="font-size:1.1rem">'+areaIcons[i]+'</span><span style="font-size:.85rem;color:var(--muted);width:110px">'+n+'</span><div style="flex:1;background:var(--border);border-radius:4px;height:8px"><div style="width:'+w+'%;background:'+color+';height:8px;border-radius:4px;transition:width 1s ease"></div></div><span style="font-size:.8rem;font-weight:700;color:'+color+'">'+s+'</span></div>';
     }).join('');
   }
+  trackEvent('quiz_teaser_shown');
   show('screen-teaser');
   document.getElementById('progress-bar').style.width='85%';
   // After 2.2s, transition to email gate
