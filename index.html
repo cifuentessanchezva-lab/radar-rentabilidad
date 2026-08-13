@@ -314,22 +314,13 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
   <div class="container">
     <div class="context-card">
       <h2>Primero, cuentanos sobre tu negocio</h2>
-      <p class="sub">Estos dos datos anclan el calculo a tu realidad. Usamos rangos, no valores exactos.</p>
+      <p class="sub">Solo 2 datos rapidos para anclar el diagnostico a tu realidad. Usamos rangos, no exactos.</p>
 
       <div class="ctx-block">
         <div class="ctx-label">Facturacion mensual aproximada</div>
         <div class="ctx-options" id="revenue-options"></div>
       </div>
 
-      <div class="ctx-block">
-        <div class="ctx-label">Clientes activos actualmente</div>
-        <div class="ctx-options">
-          <div class="ctx-option" onclick="selectClients(0,this)" data-val="3"><div class="ctx-option-label">1 a 5 clientes</div><div class="ctx-check"></div></div>
-          <div class="ctx-option" onclick="selectClients(1,this)" data-val="13"><div class="ctx-option-label">6 a 20 clientes</div><div class="ctx-check"></div></div>
-          <div class="ctx-option" onclick="selectClients(2,this)" data-val="35"><div class="ctx-option-label">21 a 50 clientes</div><div class="ctx-check"></div></div>
-          <div class="ctx-option" onclick="selectClients(3,this)" data-val="80"><div class="ctx-option-label">Mas de 50 clientes</div><div class="ctx-check"></div></div>
-        </div>
-      </div>
 
       <div class="ctx-block">
         <div class="ctx-label">�Que tipo de negocio tienes?</div>
@@ -343,15 +334,6 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
         </div>
       </div>
 
-      <div class="ctx-block">
-        <div class="ctx-label">&#x1F4B0; ¿Cuál es tu margen neto aproximado antes de impuestos? <span style="font-size:.8em;color:#94a3b8">(opcional)</span></div>
-        <div class="ctx-options" id="margin-options">
-          <div class="ctx-option" onclick="selectMargin('lt10',this)"><div class="ctx-option-label">Menos del 10%</div><div class="ctx-option-sub">Cada peso vendido deja menos de 10 centavos</div><div class="ctx-check"></div></div>
-          <div class="ctx-option" onclick="selectMargin('r10_20',this)"><div class="ctx-option-label">Entre 10% y 20%</div><div class="ctx-option-sub">Margen ajustado, tipico en comercio y servicios</div><div class="ctx-check"></div></div>
-          <div class="ctx-option" onclick="selectMargin('r20_35',this)"><div class="ctx-option-label">Entre 20% y 35%</div><div class="ctx-option-sub">Margen saludable, buen control de costos</div><div class="ctx-check"></div></div>
-          <div class="ctx-option" onclick="selectMargin('gt35',this)"><div class="ctx-option-label">Mas del 35%</div><div class="ctx-option-sub">Alto margen, modelo de alta escala o especializado</div><div class="ctx-check"></div></div>
-        </div>
-      </div>
 
       <button class="btn-primary" id="ctx-continue" onclick="startQuestions()" disabled>Continuar con el diagnostico --></button>
     </div>
@@ -379,6 +361,43 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
 </div>
 
 <!-- PANTALLA TRANSICION -->
+
+<!-- POST-QUIZ CONTEXT -->
+<div id="screen-postquiz" class="screen">
+  <div class="container">
+    <div class="context-card">
+      <div style="text-align:center;margin-bottom:28px">
+        <div style="font-size:2.5rem;margin-bottom:12px">&#127775;</div>
+        <h2 style="font-size:1.3rem">Ya casi esta listo tu diagnostico</h2>
+        <p class="sub" style="margin-bottom:0">Dos datos mas para personalizar tu analisis financiero (opcional)</p>
+      </div>
+
+      <div class="ctx-block">
+        <div class="ctx-label">Clientes activos actualmente</div>
+        <div class="ctx-options" id="postquiz-clients-options">
+          <div class="ctx-option" onclick="selectClientsPost(3,this)"><div class="ctx-option-label">1 a 5 clientes</div><div class="ctx-check"></div></div>
+          <div class="ctx-option" onclick="selectClientsPost(13,this)"><div class="ctx-option-label">6 a 20 clientes</div><div class="ctx-check"></div></div>
+          <div class="ctx-option" onclick="selectClientsPost(35,this)"><div class="ctx-option-label">21 a 50 clientes</div><div class="ctx-check"></div></div>
+          <div class="ctx-option" onclick="selectClientsPost(80,this)"><div class="ctx-option-label">Mas de 50 clientes</div><div class="ctx-check"></div></div>
+        </div>
+      </div>
+
+      <div class="ctx-block">
+        <div class="ctx-label">&#x1F4B0; Margen neto aproximado <span style="font-size:.8em;color:#94a3b8">(opcional)</span></div>
+        <div class="ctx-options" id="margin-options">
+          <div class="ctx-option" onclick="selectMargin('lt10',this)"><div class="ctx-option-label">Menos del 10%</div><div class="ctx-option-sub">Menos de 10 centavos por cada peso vendido</div><div class="ctx-check"></div></div>
+          <div class="ctx-option" onclick="selectMargin('r10_20',this)"><div class="ctx-option-label">Entre 10% y 20%</div><div class="ctx-option-sub">Margen ajustado, tipico en comercio y servicios</div><div class="ctx-check"></div></div>
+          <div class="ctx-option" onclick="selectMargin('r20_35',this)"><div class="ctx-option-label">Entre 20% y 35%</div><div class="ctx-option-sub">Margen saludable, buen control de costos</div><div class="ctx-check"></div></div>
+          <div class="ctx-option" onclick="selectMargin('gt35',this)"><div class="ctx-option-label">Mas del 35%</div><div class="ctx-option-sub">Alto margen, modelo de alta escala o especializado</div><div class="ctx-check"></div></div>
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="showEmailGate()" style="width:100%;justify-content:center">Ver mi diagnostico completo &#x2192;</button>
+      <p style="text-align:center;font-size:.8rem;color:var(--muted);margin-top:12px">Puedes saltar estos datos — el diagnostico igual funciona</p>
+    </div>
+  </div>
+</div>
+
 <div id="screen-teaser" class="screen">
   <div class="container" style="max-width:480px;text-align:center">
     <div style="font-size:3rem;margin-bottom:20px">&#128200;</div>
@@ -653,7 +672,7 @@ function selectClients(idx,el){
   el.classList.add('selected');
   checkCtxReady();
 }
-function checkCtxReady(){document.getElementById('ctx-continue').disabled=!(selectedRevenue&&selectedClients&&selectedBusinessType);}
+function checkCtxReady(){document.getElementById('ctx-continue').disabled=!(selectedRevenue&&selectedBusinessType);}
 
 function selectBizType(type,el){
   selectedBusinessType=type;
@@ -697,7 +716,8 @@ const HOTMART_URL='https://pay.hotmart.com/J106755421R';
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
 
 function startQuestions(){
-  if(!selectedRevenue||!selectedClients) return;
+  if(!selectedRevenue||!selectedBusinessType) return;
+  if(selectedClients===null) selectedClients=13; // default mid-range
   currentQ=0; answers=new Array(questions.length).fill(null);
   show('screen-question'); renderQuestion();
   trackEvent('quiz_context_complete');
@@ -719,8 +739,19 @@ function renderQuestion(){
   document.getElementById('btn-next').disabled=answers[currentQ]===null;
 }
 function selectOption(i){answers[currentQ]=i;renderQuestion();}
-function nextQuestion(){if(answers[currentQ]===null)return;if(currentQ<questions.length-1){currentQ++;renderQuestion();trackEvent('quiz_step',{question:currentQ+1,total:questions.length,section:sections[questions[currentQ].section].label});}else showEmailGate();}
+function nextQuestion(){if(answers[currentQ]===null)return;if(currentQ<questions.length-1){currentQ++;renderQuestion();trackEvent('quiz_step',{question:currentQ+1,total:questions.length,section:sections[questions[currentQ].section].label});}else showPostQuiz();}
 function prevQuestion(){if(currentQ>0){currentQ--;renderQuestion();}}
+function showPostQuiz(){
+  show('screen-postquiz');
+  updateProgress(95);
+  trackEvent('postquiz_context_shown');
+}
+function selectClientsPost(val,el){
+  selectedClients=val;
+  document.querySelectorAll('#postquiz-clients-options .ctx-option').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
 
 // COMPUTE  anchored to declared revenue + real benchmarks
 function computeResults(){
