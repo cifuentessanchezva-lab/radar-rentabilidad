@@ -825,8 +825,7 @@ function showEmailGate(){
   // After 2.2s, transition to email gate
   setTimeout(()=>{
     const priceUSD=37;
-    const priceLocal=Math.round(priceUSD*selectedCurrency.rate);
-    const priceStr=selectedCurrency.code==='USD'?'$37 USD':selectedCurrency.symbol+priceLocal.toLocaleString('es-CO')+' '+selectedCurrency.code;
+    const priceStr='$37 USD';
     document.getElementById('price-display').textContent=priceStr;
     const priceBtnEl=document.getElementById('price-btn');
     if(priceBtnEl) priceBtnEl.textContent=priceStr;
