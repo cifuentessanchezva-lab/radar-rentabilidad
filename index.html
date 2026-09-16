@@ -761,7 +761,6 @@ function nextQuestion(){if(answers[currentQ]===null)return;if(currentQ<questions
 function prevQuestion(){if(currentQ>0){currentQ--;renderQuestion();}}
 function showPostQuiz(){
   show('screen-postquiz');
-  updateProgress(95);
   trackEvent('postquiz_context_shown');
 }
 function selectClientsPost(val,el){
