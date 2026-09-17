@@ -900,7 +900,13 @@ function saveLeadAndPay(){
   }catch(e){}
   window.open(HOTMART_URL,'_blank');
 }
-function registerToBrevo(e,s,f,p){fetch('https://api.brevo.com/v3/contacts',{method:'POST',headers:{'accept':'application/json','content-type':'application/json','api-key':['xkeysib-0a3c0ef2c2bf13557eea300e84344c21f7d47f9acdd86eab','9476280f627f4fcf-SWdvChYU0CWpc8yC'].join('')},body:JSON.stringify({email:e,attributes:{SCORE:String(s),FASE:f,PERDIDA_MENSUAL:String(Math.round(p))},listIds:[3],updateEnabled:true})}).catch(function(){});}
+function registerToBrevo(e,s,f,p){
+  const apiKey=['xkeysib-0a3c0ef2c2bf13557eea300e84344c21f7d47f9acdd86eab','9476280f627f4fcf-SWdvChYU0CWpc8yC'].join('');
+  // Guardar contacto en lista
+  fetch('https://api.brevo.com/v3/contacts',{method:'POST',headers:{'accept':'application/json','content-type':'application/json','api-key':apiKey},body:JSON.stringify({email:e,attributes:{SCORE:String(s),FASE:f,PERDIDA_MENSUAL:String(Math.round(p))},listIds:[3],updateEnabled:true})}).catch(function(){});
+  // Notificación al dueño
+  fetch('https://api.brevo.com/v3/smtp/email',{method:'POST',headers:{'accept':'application/json','content-type':'application/json','api-key':apiKey},body:JSON.stringify({sender:{name:'Radar Rentabilidad',email:'victor@focusrentabilidad.com'},to:[{email:'victor@focusrentabilidad.com',name:'Victor'}],subject:'🎯 Nuevo lead en Radar de Rentabilidad',htmlContent:'<h2>Nuevo usuario registrado</h2><p><b>Email:</b> '+e+'</p><p><b>Score:</b> '+s+'</p><p><b>Fase:</b> '+f+'</p><p><b>Pérdida mensual estimada:</b> $'+Math.round(p)+' USD</p>'})}).catch(function(){});
+}
 function showResults(isFree){
   if(!validateEmail()) return;
   let pendingPaid=false;try{pendingPaid=localStorage.getItem('radarIsPaid')==='1'||localStorage.getItem('radarPendingPaid')==='1';}catch(e){}
