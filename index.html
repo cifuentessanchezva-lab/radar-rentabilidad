@@ -280,15 +280,17 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
     <div class="badge" style="margin-left:auto;margin-right:auto;display:flex;width:fit-content;">Radar de Rentabilidad</div>
     <h1>Descubre cuanto dinero puede<br><span>recuperar tu negocio</span><br>cada mes</h1>
     <p class="subtitle">En menos de 5 minutos, analizamos 4 areas criticas de tu empresa y te entregamos un diagnostico personalizado con numeros reales de tu negocio.</p>
-    <div style="background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.2);border-radius:14px;padding:20px 24px;margin-bottom:32px;text-align:center;">
-      <p style="font-size:.92rem;color:var(--muted);line-height:1.7;max-width:580px;margin:0 auto;">Anos de experiencia en Transformacion de Negocios, condensados en 15 minutos. Lo que antes era exclusivo de grandes corporaciones con presupuestos de consultoria de 6 cifras, hoy esta al alcance de cualquier PYME o emprendedor de LATAM &mdash; con una inversion minima y un retorno que puedes medir desde el primer mes.</p>
-    </div>
     <div class="stats-row">
       <div class="stat"><div class="stat-num">4</div><div class="stat-label">Areas analizadas</div></div>
       <div class="stat"><div class="stat-num">12</div><div class="stat-label">Preguntas clave</div></div>
       <div class="stat"><div class="stat-num">5 min</div><div class="stat-label">Tiempo estimado</div></div>
     </div>
-    <div class="currency-selector">
+    <div style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:12px;padding:12px 20px;margin-bottom:24px;text-align:center;">
+      <p style="font-size:.9rem;color:#10b981;margin:0;font-weight:600;">&#x1F4C8; +327 empresas ya descubrieron sus fugas de rentabilidad</p>
+    </div>
+    <button class="btn-primary" onclick="trackEvent('quiz_start');show('screen-context')" style="font-size:1.1rem;padding:18px 36px;">Descubrir cuánto estoy perdiendo →</button>
+    <div class="trust">100% gratuito &middot; Resultado inmediato &middot; Sin registro previo</div>
+    <div class="currency-selector" style="margin-top:24px;">
       <div class="currency-label">Selecciona tu moneda:</div>
       <div class="currency-options">
         <button class="currency-btn" onclick="setCurrency('COP')" id="cur-COP">COP</button>
@@ -300,8 +302,6 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
         <button class="currency-btn" onclick="setCurrency('CLP')" id="cur-CLP">CLP</button>
       </div>
     </div>
-    <button class="btn-primary" onclick="trackEvent('quiz_start');show('screen-context')">Iniciar mi diagnostico 🚀</button>
-    <div class="trust">100% gratuito &middot; Resultados inmediatos &middot; Sin tarjeta de credito</div>
     <div id="returning-user-banner" style="display:none;margin-top:28px;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.25);border-radius:14px;padding:16px 20px;text-align:center;">
       <p style="color:#94a3b8;font-size:.85rem;margin:0 0 10px">Ya tienes un diagnostico pagado en este dispositivo</p>
       <button onclick="loadPreviousReport()" style="background:linear-gradient(135deg,#065f46,#047857);color:#fff;border:none;padding:12px 28px;border-radius:10px;font-size:.95rem;font-weight:700;cursor:pointer;">&#x1F4CA; Ver mi reporte anterior</button>
