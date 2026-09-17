@@ -421,9 +421,45 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
       <div class="teaser-label" style="margin-bottom:6px">en los próximos 6 meses</div>
       <p style="font-size:.8rem;color:#ef4444;margin-bottom:24px;font-weight:600">⚠️ Cada mes que pasa sin actuar, ese dinero se va.</p>
 
+      <!-- PREVIEW BORROSO DE AREAS -->
+      <div style="position:relative;margin-bottom:20px;border-radius:14px;overflow:hidden;border:1px solid rgba(99,102,241,.2)">
+        <div style="background:rgba(15,23,42,.8);padding:16px">
+          <div style="font-size:.75rem;font-weight:700;color:#94a3b8;letter-spacing:.06em;margin-bottom:12px;text-align:left">TUS 4 ÁREAS CRÍTICAS</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div style="background:rgba(30,41,59,.8);border-radius:10px;padding:12px;filter:blur(4px);user-select:none">
+              <div style="font-size:.72rem;color:#94a3b8;margin-bottom:4px">Finanzas</div>
+              <div style="font-size:1.4rem;font-weight:800;color:#ef4444">28</div>
+              <div style="height:4px;background:rgba(239,68,68,.3);border-radius:2px;margin-top:6px"><div style="width:28%;height:100%;background:#ef4444;border-radius:2px"></div></div>
+            </div>
+            <div style="background:rgba(30,41,59,.8);border-radius:10px;padding:12px;filter:blur(4px);user-select:none">
+              <div style="font-size:.72rem;color:#94a3b8;margin-bottom:4px">Operaciones</div>
+              <div style="font-size:1.4rem;font-weight:800;color:#f59e0b">42</div>
+              <div style="height:4px;background:rgba(245,158,11,.3);border-radius:2px;margin-top:6px"><div style="width:42%;height:100%;background:#f59e0b;border-radius:2px"></div></div>
+            </div>
+            <div style="background:rgba(30,41,59,.8);border-radius:10px;padding:12px;filter:blur(4px);user-select:none">
+              <div style="font-size:.72rem;color:#94a3b8;margin-bottom:4px">Clientes</div>
+              <div style="font-size:1.4rem;font-weight:800;color:#ef4444">35</div>
+              <div style="height:4px;background:rgba(239,68,68,.3);border-radius:2px;margin-top:6px"><div style="width:35%;height:100%;background:#ef4444;border-radius:2px"></div></div>
+            </div>
+            <div style="background:rgba(30,41,59,.8);border-radius:10px;padding:12px;filter:blur(4px);user-select:none">
+              <div style="font-size:.72rem;color:#94a3b8;margin-bottom:4px">Automatización</div>
+              <div style="font-size:1.4rem;font-weight:800;color:#f59e0b">45</div>
+              <div style="height:4px;background:rgba(245,158,11,.3);border-radius:2px;margin-top:6px"><div style="width:45%;height:100%;background:#f59e0b;border-radius:2px"></div></div>
+            </div>
+          </div>
+        </div>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(10,15,30,.5);backdrop-filter:blur(2px)">
+          <div style="text-align:center">
+            <div style="font-size:1.4rem;margin-bottom:6px">🔒</div>
+            <div style="font-size:.85rem;font-weight:700;color:#fff">Ingresa tu email para desbloquear</div>
+            <div style="font-size:.75rem;color:#94a3b8;margin-top:4px">Tu diagnóstico completo te espera</div>
+          </div>
+        </div>
+      </div>
+
       <!-- CAMINO PRINCIPAL: GRATIS -->
       <div style="background:rgba(16,185,129,.07);border:1.5px solid rgba(16,185,129,.3);border-radius:16px;padding:20px;margin-bottom:16px">
-        <div style="font-size:.72rem;font-weight:700;color:#10b981;letter-spacing:.08em;margin-bottom:8px">DIAGNÓSTICO GRATUITO</div>
+        <div style="font-size:.72rem;font-weight:700;color:#10b981;letter-spacing:.08em;margin-bottom:8px">DESBLOQUEA TU DIAGNÓSTICO GRATUITO</div>
         <p style="font-size:.88rem;color:var(--muted);margin-bottom:14px;line-height:1.5">Ingresa tu email y ve <strong style="color:var(--text)">exactamente en qué área se está yendo el dinero</strong> y por qué — con tu puntaje real vs. el mercado.</p>
         <div class="input-group" style="margin-bottom:12px">
           <input class="input-field" type="text" id="input-name" placeholder="Tu nombre" />
@@ -432,6 +468,7 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
           <input class="input-field" type="text" id="input-company" placeholder="Empresa (opcional)" />
         </div>
         <button class="btn-primary" style="width:100%;justify-content:center;background:linear-gradient(135deg,#059669,#10b981)" onclick="trackEvent('quiz_complete',{tipo:'free'});showResults(true)">Ver mi diagnostico gratuito &#8594;</button>
+        <p style="font-size:.75rem;color:var(--muted);margin-top:10px;text-align:center">🔒 Sin spam. Solo tu diagnóstico. Puedes darte de baja cuando quieras.</p>
       </div>
 
       <!-- WHATSAPP CTA -->
