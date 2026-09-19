@@ -70,11 +70,14 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
 /* QUESTIONS */
 #screen-question{background:var(--bg);}
 .q-header{margin-bottom:40px;width:100%;}
-.q-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.q-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
 .q-section{font-size:.8rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.1em;}
 .q-count{font-size:.8rem;color:var(--muted);}
-.q-progress-track{height:6px;background:var(--border);border-radius:100px;overflow:hidden;}
-.q-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:100px;transition:width .4s ease;}
+.q-progress-wrap{margin-bottom:6px;}
+.q-progress-track{height:10px;background:var(--border);border-radius:100px;overflow:hidden;}
+.q-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:100px;transition:width .5s cubic-bezier(.4,0,.2,1);}
+.q-progress-label{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;color:var(--muted);}
+.q-progress-pct{color:var(--accent);font-weight:700;}
 .question-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:40px;}
 .question-icon{font-size:2.5rem;margin-bottom:16px;}
 .question-text{font-size:1.3rem;font-weight:700;margin-bottom:8px;}
@@ -488,7 +491,10 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
   <div class="container">
     <div class="q-header">
       <div class="q-meta"><span class="q-section" id="q-section-label"></span><span class="q-count" id="q-count-label"></span></div>
-      <div class="q-progress-track"><div class="q-progress-fill" id="q-progress-fill"></div></div>
+      <div class="q-progress-wrap">
+        <div class="q-progress-track"><div class="q-progress-fill" id="q-progress-fill"></div></div>
+        <div class="q-progress-label"><span>Progreso del diagnóstico</span><span class="q-progress-pct" id="q-progress-pct"></span></div>
+      </div>
     </div>
     <div class="question-card">
       <div class="question-icon" id="q-icon"></div>
@@ -923,10 +929,11 @@ function startQuestions(){
 }
 
 function renderQuestion(){
-  const q=questions[currentQ],sec=sections[q.section],pct=(currentQ/questions.length)*100;
+  const q=questions[currentQ],sec=sections[q.section],pct=Math.round(((currentQ+1)/questions.length)*100);
   document.getElementById('q-section-label').textContent=sec.icon+' '+sec.label;
   document.getElementById('q-count-label').textContent=(currentQ+1)+' de '+questions.length;
   document.getElementById('q-progress-fill').style.width=pct+'%';
+  document.getElementById('q-progress-pct').textContent=pct+'%';
   document.getElementById('progress-bar').style.width=(10+pct*0.8)+'%';
   document.getElementById('q-icon').textContent=q.icon;
   document.getElementById('q-text').textContent=q.text;
