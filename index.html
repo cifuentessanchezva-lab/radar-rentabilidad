@@ -281,12 +281,11 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
 <div id="screen-intro" class="screen active">
   <div class="container">
     <div class="badge" style="margin-left:auto;margin-right:auto;display:flex;width:fit-content;">Radar de Rentabilidad</div>
-    <h1>¿Sabes por dónde se está<br><span>fugando la rentabilidad</span><br>de tu empresa?</h1>
-    <p class="subtitle">Radar de Rentabilidad analiza 4 áreas críticas de tu negocio para identificar dónde se están consumiendo tus recursos y qué está afectando tu margen.</p>
-    <p style="text-align:center;color:var(--text);font-size:1rem;font-weight:500;margin-bottom:28px;max-width:520px;margin-left:auto;margin-right:auto;">Conoce el nivel de madurez de la gestión de rentabilidad de tu empresa.</p>
+    <h1><span>Facturar no significa ganar.</span></h1>
+    <p class="subtitle">Descubre en 5 minutos exactamente dónde se está yendo el dinero de tu empresa — y qué deberías revisar primero.</p>
     <div style="display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:40px;">
-      <button class="btn-primary" onclick="trackEvent('quiz_start');show('screen-context')" style="font-size:1.05rem;padding:18px 40px;">Determinar mis fugas de rentabilidad →</button>
-      <div class="trust">Diagnóstico gratuito &middot; 5 minutos &middot; Resultados personalizados a tu correo</div>
+      <button class="btn-primary" onclick="trackEvent('quiz_start');show('screen-context')" style="font-size:1.05rem;padding:18px 40px;">Hacer el diagnóstico gratis →</button>
+      <div class="trust">Sin tarjeta &middot; 5 minutos &middot; Resultados a tu correo</div>
     </div>
 
     <!-- ESCENARIO EMPRESA: DASHBOARD DE FUGAS -->
@@ -295,9 +294,9 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
       <!-- Header empresa -->
       <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:rgba(0,0,0,.4);border-bottom:1px solid rgba(239,68,68,.15);">
         <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:32px;height:32px;border-radius:8px;background:#1e2a3a;display:flex;align-items:center;justify-content:center;font-size:1rem;">🏥</div>
+          <div style="width:32px;height:32px;border-radius:8px;background:#1e2a3a;display:flex;align-items:center;justify-content:center;font-size:1rem;">🏢</div>
           <div>
-            <div style="font-size:.82rem;font-weight:700;color:#f1f5f9;">IPS Clínica ejemplo</div>
+            <div style="font-size:.82rem;font-weight:700;color:#f1f5f9;">Empresa de servicios · ejemplo</div>
             <div style="font-size:.7rem;color:#64748b;">Empresa mediana · 45 empleados</div>
           </div>
         </div>
@@ -438,6 +437,18 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
     </div>
     <div style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:12px;padding:12px 20px;margin-bottom:24px;text-align:center;">
       <p style="font-size:.9rem;color:#10b981;margin:0;font-weight:600;">&#x1F4C8; +327 empresas ya descubrieron sus fugas de rentabilidad</p>
+    </div>
+    <!-- AUTOR -->
+    <div style="display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 18px;margin-bottom:24px;">
+      <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:800;color:white;flex-shrink:0;">VC</div>
+      <div>
+        <div style="font-size:.88rem;font-weight:700;color:var(--text);">Víctor Cifuentes</div>
+        <div style="font-size:.78rem;color:var(--muted);">Consultor de rentabilidad empresarial · Colombia</div>
+      </div>
+    </div>
+    <!-- SEGUNDO CTA -->
+    <div style="text-align:center;margin-bottom:28px;">
+      <button class="btn-primary" onclick="trackEvent('quiz_start');show('screen-context')" style="font-size:1rem;padding:16px 36px;">Hacer el diagnóstico gratis →</button>
     </div>
     <div class="currency-selector" style="margin-top:0;">
       <div class="currency-label">Selecciona tu moneda:</div>
@@ -658,11 +669,12 @@ h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-
           <div style="font-size:1.7rem;font-weight:900;color:var(--text)" id="price-display">$37 USD</div>
           <span style="font-size:.78rem;color:var(--muted)">&middot; pago unico &middot; acceso inmediato</span>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:12px;font-size:.75rem;color:var(--muted)">
-          <div>&#10003; Plan de acciones priorizadas</div>
-          <div>&#10003; Hoja de ruta 90 dias</div>
-          <div>&#10003; Proyeccion ROI a 6 meses</div>
-          <div>&#10003; Benchmarks por sector</div>
+        <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:12px;font-size:.78rem;color:var(--muted)">
+          <div>&#10003; Puntuación detallada en las 4 áreas con análisis de cada respuesta</div>
+          <div>&#10003; Las 3 fugas prioritarias que debes atacar primero en tu negocio</div>
+          <div>&#10003; Comparativo vs. empresas similares de tu sector</div>
+          <div>&#10003; Hoja de ruta de 90 días con acciones concretas semana a semana</div>
+          <div>&#10003; Estimación del impacto económico si corriges cada fuga</div>
         </div>
         <a id="hotmart-link" onclick="trackEvent('report_purchase_click')" href="https://pay.hotmart.com/J106755421R" target="_blank" style="text-decoration:none;display:block">
           <button class="btn-primary" style="width:100%;justify-content:center;" onclick="saveLeadAndPay()">Quiero detener las fugas ahora &#8594; <span id="price-btn">$37 USD</span></button>
